@@ -1,14 +1,15 @@
-// 各モジュールの読み込み
+/* 各モジュールの読み込み */
 const express = require('express');
 const http = require('http');
 const WebSocket = require('ws');
 
-const app = express(); // Expressアプリケーションを作成
+const app = express();
 const server = http.createServer(app);
 const wss = new WebSocket.Server({ server });
 
-app.use(express.static('public'));
+app.use(express.static('public')); // 提供ディレクトリを'public'に設定
 
+/* クライアント接続時の動作 */
 wss.on('connection', (ws) => {
     console.log('Client connected');
 
@@ -21,11 +22,13 @@ wss.on('connection', (ws) => {
     });
 });
 
+/* クライアント切断時の動作 */
 ws.on('close', () => {
     console.log('Client disconnected');
     });
 });
 
+/* HTTPサーバーをポート3000で起動 */
 server.listen(3000, () => {
     console.log('Server is running on http://localhost:3000');
 });
