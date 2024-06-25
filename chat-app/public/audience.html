@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chat App</title>
+  <style>
+    body { font-family: Arial, sans-serif; }
+    #chat-container { display: flex; justify-content: center; align-items: flex-end; }
+    #chat { width: 300px; height: 400px; border: 1px solid #ccc; overflow-y: auto; display: flex; flex-direction: column; justify-content: flex-end; padding: 10px; }
+    #input-container { display: flex; justify-content: center; margin-top: 10px; }
+    #message { width: 240px; }
+  </style>
+</head>
+<body>
+  <div id="chat-container">
+    <div id="chat"></div>
+  </div>
+  <div id="input-container">
+    <input type="text" id="message" placeholder="Type a message">
+    <button id="send">Send</button>
+  </div>
+
+  <script src="client_audience.js"></script>
+</body>
+</html>
