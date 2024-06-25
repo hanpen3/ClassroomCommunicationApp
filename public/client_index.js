@@ -10,6 +10,10 @@ audienceButton.onclick = () => {
     window.open("audience.html", null, "top=0,left=" + (screen.width - 500) + ",width=" + "500" + ",height=" + screen.availHeight);
 };
 
+hostButton.onclick = () => {
+    window.open("host.html", null, "top=0,left=" + (screen.width - 500) + ",width=" + "500" + ",height=" + screen.availHeight);
+};
+
 messageInput.addEventListener('keypress', (event) => {
     if (event.key === 'Enter') {
     sendButton.click();
