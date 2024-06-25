@@ -1,0 +1,72 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f0f0f0;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+h1 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.main-content {
+    display: flex;
+    gap: 20px;
+}
+
+.left-panel {
+    flex: 2;
+    display: flex;
+    flex-direction: column;
+}
+
+.right-panel {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+#versatile-space, #chat-display, #question-display {
+    background-color: white;
+    border: 1px solid #ccc;
+    padding: 20px;
+    border-radius: 5px;
+    min-height: 300px;
+}
+
+#versatile-space {
+    flex-grow: 1;
+    margin-bottom: 20px;
+}
+
+.bottom-panel {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+button {
+    padding: 10px 15px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+#chat-display, #question-display {
+    height: 300px;
+    overflow-y: auto;
+}

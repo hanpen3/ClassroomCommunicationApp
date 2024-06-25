@@ -1,12 +1,39 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ja">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>主催者側 メイン画面</title>
+    <link rel="stylesheet" href="host.css">
 </head>
 <body>
-    <h1>Hello, world!</h1>
-    <script src="host.js"></script>
+    <div class="container">
+        <h1 id="event-name">イベント名</h1>
+        <div class="main-content">
+            <div class="left-panel">
+                <div id="versatile-space">
+                    <h2>汎用スペース</h2>
+                    <p>(投票/リアクションを表示)</p>
+                </div>
+                <div class="bottom-panel">
+                    <p id="connection-count">接続: 0人</p>
+                    <button id="worksheet-btn">ワークシート</button>
+                    <button id="vote-btn">投票</button>
+                    <button id="end-event-btn">イベントを終了</button>
+                </div>
+            </div>
+            <div class="right-panel">
+                <div id="chat-display">
+                    <h2>チャット表示画面</h2>
+                    <div id="chat-messages"></div>
+                </div>
+                <div id="question-display">
+                    <h2>質問表示画面</h2>
+                    <div id="questions"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="script.js"></script>
 </body>
 </html>
