@@ -24,6 +24,10 @@ ws.onmessage = (event) => {
     chat.scrollTop = chat.scrollHeight;
 };
 
+window.onbeforeunload = () => {
+    ws.send(username + " さんが退出しました");
+};
+
 sendButton.onclick = () => {
     const message = messageInput.value;
     if (message) {
