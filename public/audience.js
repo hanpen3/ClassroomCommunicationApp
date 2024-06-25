@@ -17,15 +17,15 @@ ws.onopen = () => {
     ws.send(username + " さんが参加しました");
 }
 
+window.onbeforeunload = () => {
+    ws.send(username + " さんが退出しました");
+};
+
 ws.onmessage = (event) => {
     const message = document.createElement('div');
     message.textContent = event.data; // メッセージを文字列として処理
     chat.appendChild(message);
     chat.scrollTop = chat.scrollHeight;
-};
-
-window.onbeforeunload = () => {
-    ws.send(username + " さんが退出しました");
 };
 
 sendButton.onclick = () => {
