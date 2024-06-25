@@ -8,7 +8,8 @@ const sendButton = document.getElementById('send');
 sendButton.style.height = (window.innerHeight * 0.05) + "px";
 sendButton.style.width = (window.innerWidth * 0.2) + "px";
 
-const ws = new WebSocket('ws://localhost:3000');
+const hostname = window.location.hostname;
+const ws = new WebSocket(`ws://${hostname}:3000`);
 
 var username = prompt("ユーザー名");
 
