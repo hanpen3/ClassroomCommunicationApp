@@ -1,71 +1,55 @@
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
-body {
-    font-family: 'Helvetica Neue', Arial, sans-serif;
-    background-color: #f0f2f5;
-    color: #333;
-    line-height: 1.6;
-    padding: 20px;
-}
-
+/* スタイル */
 center {
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
     min-height: 20vh;
 }
 
+/* タイトルについて */
 h1 {
-    font-size: 2.5rem;
+    font-size: 3rem;
     color: #2c3e50;
     margin-bottom: 2rem;
     text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
 }
 
+/* ボタンについて */
 .button {
     display: flex;
-    gap: 20px;
+    gap: 40px;  /* 主催者と参加者のボタンの間隔を40pxに設定 */
 }
 
+/* 文字について */
 button {
     padding: 12px 12px;
     font-size: 1rem;
     color: #fff;
-    background-color: #2a8dcf;
     border: none;
     border-radius: 5px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
 }
 
-button:hover {
-    background-color: #2980b9;
-    transform: translateY(-2px);
-    box-shadow: 0 6px 8px rgba(0,0,0,0.15);
-}
-
+/* 主催者ボタンの色 */
 button#host {
     background-color: #e74c3c;
 }
 
+/* カーソルを置いた時の色 */
 button#host:hover {
     background-color: #c0392b;
 }
 
+/* オーディエンスボタンの色 */
 button#audience {
     background-color: #2ecc71;
 }
 
+/* カーソルを置いた時の色 */
 button#audience:hover {
     background-color: #27ae60;
 }
 
+/* スマホなどの小さい画面向け */
 @media (max-width: 600px) {
     h1 {
         font-size: 2rem;
