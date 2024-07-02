@@ -4,7 +4,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const worksheetText = document.getElementById('worksheet-text');
     
     backBtn.addEventListener('click', () => {
-        window.location.href = 'host.html';
+        window.location.href = '../host.html';
     });
     
     saveBtn.addEventListener('click', () => {

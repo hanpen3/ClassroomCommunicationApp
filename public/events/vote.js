@@ -6,7 +6,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const voteOption2 = document.getElementById('vote-option2');
     
     backBtn.addEventListener('click', () => {
-        window.location.href = 'host.html';
+        window.location.href = '../host.html';
     });
     
     startVoteBtn.addEventListener('click', () => {

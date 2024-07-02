@@ -16,11 +16,11 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // ボタンのクリックイベント
     worksheetBtn.addEventListener('click', () => {
-        window.location.href = 'worksheet.html';
+        window.location.href = './events/worksheet.html';
     });
     
     voteBtn.addEventListener('click', () => {
-        window.location.href = 'vote.html';
+        window.location.href = './events/vote.html';
     });
     
     /* イベント終了ボタンで全クライアントの接続を切断 */
@@ -30,7 +30,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 .then(response => response.text())
                 .then(data => {
                     console.log(data);
-                    window.location.href = 'end-event.html';
+                    window.location.href = './events/end-event.html';
                 })
                 .catch(error => console.error('Error:', error));
         }
