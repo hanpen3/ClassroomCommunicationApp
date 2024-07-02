@@ -1,4 +1,5 @@
 /* 各モジュールの読み込み */
+const { Socket } = require('dgram');
 const express = require('express');
 const http = require('http');
 const WebSocket = require('ws');
@@ -8,6 +9,8 @@ const server = http.createServer(app);
 const wss = new WebSocket.Server({ server });
 
 app.use(express.static('public')); // 提供ディレクトリを'public'に設定
+
+let clients = [];
 
 /* クライアント接続時の動作 */
 wss.on('connection', (ws) => {
@@ -27,6 +30,16 @@ ws.on('close', () => {
     console.log('Client disconnected');
     });
 });
+
+/* 主催者のボタンクリックから全てのクライアントとの接続を切断
+app.get('/disconnectAll', (req, res) => {
+    wss.clients.forEach((client) => {
+        socket.disconnect(true);
+    });
+    clients = [];
+    res.send('All clients disconnected');
+});
+*/
 
 /* HTTPサーバーをポート3000で起動 */
 server.listen(3000, () => {

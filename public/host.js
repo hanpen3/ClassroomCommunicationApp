@@ -19,6 +19,7 @@ document.addEventListener('DOMContentLoaded', function() {
     voteBtn.addEventListener('click', () => alert('投票が開始されました'));
     endEventBtn.addEventListener('click', () => {
         if (confirm('イベントを終了してもよろしいですか？')) {
+            //fetch('http://localhost:3000/disconnectAll');
             alert('イベントが終了しました');
         }
     });
