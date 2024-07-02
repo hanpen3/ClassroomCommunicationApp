@@ -15,12 +15,17 @@ document.addEventListener('DOMContentLoaded', function() {
     }, 5000);
 
     // ボタンのクリックイベント
-    worksheetBtn.addEventListener('click', () => alert('ワークシートが開かれました'));
-    voteBtn.addEventListener('click', () => alert('投票が開始されました'));
+    worksheetBtn.addEventListener('click', () => {
+        window.location.href = 'worksheet.html';
+    });
+    
+    voteBtn.addEventListener('click', () => {
+        window.location.href = 'vote.html';
+    });
+    
     endEventBtn.addEventListener('click', () => {
         if (confirm('イベントを終了してもよろしいですか？')) {
-            //fetch('http://localhost:3000/disconnectAll');
-            alert('イベントが終了しました');
+            window.location.href = 'end-event.html';
         }
     });
 
