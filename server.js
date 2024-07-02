@@ -15,31 +15,32 @@ let clients = [];
 /* クライアント接続時の動作 */
 wss.on('connection', (ws) => {
     console.log('Client connected');
+    clients.push(ws);
 
     ws.on('message', (message) => {
-    console.log(`Received: ${message}`);
-    wss.clients.forEach((client) => {
-        if (client.readyState === WebSocket.OPEN) {
-        client.send(message.toString()); // 文字列として送信
-    }
+        console.log(`Received: ${message}`);
+        wss.clients.forEach((client) => {
+            if (client.readyState === WebSocket.OPEN) {
+                client.send(message.toString()); // 文字列として送信
+            }
+        });
+    });
+
+    /* クライアント切断時の動作 */
+    ws.on('close', () => {
+        console.log('Client disconnected');
+        clients = clients.filter(client => client !== ws);
     });
 });
 
-/* クライアント切断時の動作 */
-ws.on('close', () => {
-    console.log('Client disconnected');
-    });
-});
-
-/* 主催者のボタンクリックから全てのクライアントとの接続を切断
+/* 主催者のボタンクリックから全クライアントとの接続を切断 */
 app.get('/disconnectAll', (req, res) => {
-    wss.clients.forEach((client) => {
-        socket.disconnect(true);
+    clients.forEach(ws => {
+        ws.close();
     });
     clients = [];
     res.send('All clients disconnected');
 });
-*/
 
 /* HTTPサーバーをポート3000で起動 */
 server.listen(3000, () => {

@@ -23,9 +23,16 @@ document.addEventListener('DOMContentLoaded', function() {
         window.location.href = 'vote.html';
     });
     
+    /* イベント終了ボタンで全クライアントの接続を切断 */
     endEventBtn.addEventListener('click', () => {
         if (confirm('イベントを終了してもよろしいですか？')) {
-            window.location.href = 'end-event.html';
+            fetch('/disconnectAll')
+                .then(response => response.text())
+                .then(data => {
+                    console.log(data);
+                    window.location.href = 'end-event.html';
+                })
+                .catch(error => console.error('Error:', error));
         }
     });
 

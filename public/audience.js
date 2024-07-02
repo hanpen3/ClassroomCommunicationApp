@@ -28,6 +28,14 @@ ws.onmessage = (event) => {
     chat.scrollTop = chat.scrollHeight;
 };
 
+/* クライアントがサーバーによって切断される場合の処理 */
+ws.onclose = (event) => {
+    const message = document.createElement('div');
+    message.textContent = "サーバーによって接続が切断されました"; // メッセージを表示
+    chat.appendChild(message);
+    chat.scrollTop = chat.scrollHeight;
+};
+
 sendButton.onclick = () => {
     const message = messageInput.value;
     if (message) {
