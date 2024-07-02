@@ -1,175 +1,197 @@
+/* 全体のスタイルリセットと基本設定 */
 * {
-    margin: 20;
-    padding: 20;
-    box-sizing: border-box;
+  margin: 20;
+  padding: 20;
+  box-sizing: border-box;
 }
 
+/* ボディ全体のスタイル設定 */
 body {
-    font-family: 'Noto Sans JP', sans-serif;
-    background-color: #bbcce3;
-    color: #333;
-    height: 100vh;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    overflow: hidden; /* スクロールバーが表示されないようにする */
+  font-family: 'Noto Sans JP', sans-serif;
+  background-color: #bbcce3;
+  color: #333;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
 }
 
+/* チャットコンテナのスタイル設定 */
 #chat-container {
-    width: 100%;
-    max-width: 440px;
-    height: 100vh;
-    background-color: #b3cefb;
-    display: flex;
-    flex-direction: column;
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
+  width: 100%;
+  max-width: 440px;
+  height: 100vh;
+  background-color: #b3cefb;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
 }
 
+/* チャットヘッダーのスタイル設定 */
 #chat-header {
-    background-color: #273c75;
-    color: white;
-    padding: 15px;
-    text-align: center;
-    font-size: 18px;
-    font-weight: bold;
+  background-color: #273c75;
+  color: white;
+  padding: 15px;
+  text-align: center;
+  font-size: 18px;
+  font-weight: bold;
 }
 
+/* チャット本体のスタイル設定 */
 #chat {
-    flex-grow: 1;
-    overflow-y: auto;
-    padding: 20px;
-    display: flex;
-    flex-direction: column;
+  flex-grow: 1;
+  overflow-y: auto;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
 }
 
+/* チャットのスクロールバーのスタイル設定 */
 #chat::-webkit-scrollbar {
-    width: 6px;
+  width: 6px;
 }
 
 #chat::-webkit-scrollbar-thumb {
-    background-color: rgba(0, 0, 0, 0.2);
-    border-radius: 3px;
+  background-color: rgba(0, 0, 0, 0.2);
+  border-radius: 3px;
 }
 
+/* メッセージコンテナのスタイル設定 */
 .message-container {
-    max-width: 80%;
-    margin-bottom: 15px;
-    display: flex;
-    flex-direction: column;
+  max-width: 80%;
+  margin-bottom: 15px;
+  display: flex;
+  flex-direction: column;
 }
 
+/* 送信メッセージのスタイル設定 */
 .message-container.sent {
-    align-self: flex-end;
-    align-items: flex-end;
+  align-self: flex-end;
+  align-items: flex-end;
 }
 
+/* 受信メッセージのスタイル設定 */
 .message-container.received {
-    align-self: flex-start;
-    align-items: flex-start;
+  align-self: flex-start;
+  align-items: flex-start;
 }
 
+/* メッセージ本体のスタイル設定 */
 .message {
-    padding: 10px 15px;
-    border-radius: 20px;
-    font-size: 16px;
-    line-height: 1.4;
-    word-wrap: break-word;
-    max-width: 100%;
-    position: relative;
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
-    border: 1px solid white;
+  padding: 10px 15px;
+  border-radius: 20px;
+  font-size: 16px;
+  line-height: 1.4;
+  word-wrap: break-word;
+  max-width: 100%;
+  position: relative;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  border: 1px solid white;
 }
 
+/* 送信メッセージの背景色と形状設定 */
 .message-container.sent .message {
-    background-color: #9ecce3;
-    color: white;
-    border-top-right-radius: 0;
+  background-color: #9ecce3;
+  color: white;
+  border-top-right-radius: 0;
 }
 
+/* 受信メッセージの背景色と形状設定 */
 .message-container.received .message {
-    background-color: white;
-    color: #333;
-    border-top-left-radius: 0;
+  background-color: white;
+  color: #333;
+  border-top-left-radius: 0;
 }
 
+/* 送信メッセージの吹き出し形状設定 */
 .message-container.sent .message::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    right: -10px;
-    width: 0;
-    height: 0;
-    border-left: 10px solid #a8d1e5;
-    border-top: 10px solid transparent;
+  content: "";
+  position: absolute;
+  top: 0;
+  right: -10px;
+  width: 0;
+  height: 0;
+  border-left: 10px solid #a8d1e5;
+  border-top: 10px solid transparent;
 }
 
+/* 受信メッセージの吹き出し形状設定 */
 .message-container.received .message::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: -10px;
-    width: 0;
-    height: 0;
-    border-right: 10px solid white;
-    border-top: 10px solid transparent;
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -10px;
+  width: 0;
+  height: 0;
+  border-right: 10px solid white;
+  border-top: 10px solid transparent;
 }
 
+/* タイムスタンプのスタイル設定 */
 .timestamp {
-    font-size: 12px;
-    color: #7f8c8d;
-    margin-top: 5px;
+  font-size: 12px;
+  color: #7f8c8d;
+  margin-top: 5px;
 }
 
+/* 入力コンテナのスタイル設定 */
 #input-container {
-    display: flex;
-    padding: 15px;
-    background-color: #f1f3f6;
-    border-top: 1px solid #dcdde1;
+  display: flex;
+  padding: 15px;
+  background-color: #f1f3f6;
+  border-top: 1px solid #dcdde1;
 }
 
+/* メッセージ入力欄のスタイル設定 */
 #message {
-    flex-grow: 1;
-    padding: 12px 15px;
-    border: 1px solid #dcdde1;
-    border-radius: 25px;
-    font-size: 16px;
-    outline: none;
-    transition: border-color 0.3s;
+  flex-grow: 1;
+  padding: 12px 15px;
+  border: 1px solid #dcdde1;
+  border-radius: 25px;
+  font-size: 16px;
+  outline: none;
+  transition: border-color 0.3s;
 }
 
+/* メッセージ入力欄のフォーカス時のスタイル */
 #message:focus {
-    border-color: #00a8ff;
+  border-color: #00a8ff;
 }
 
+/* 送信ボタンのスタイル設定 */
 #send {
-    margin-left: 10px;
-    padding: 12px 20px;
-    background-color: #00a8ff;
-    color: white;
-    border: none;
-    border-radius: 25px;
-    font-size: 16px;
-    cursor: pointer;
-    transition: background-color 0.3s, transform 0.1s;
+  margin-left: 10px;
+  padding: 12px 20px;
+  background-color: #00a8ff;
+  color: white;
+  border: none;
+  border-radius: 25px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.1s;
 }
 
+/* 送信ボタンのホバー時のスタイル */
 #send:hover {
-    background-color: #0097e6;
+  background-color: #0097e6;
 }
 
+/* 送信ボタンのクリック時のスタイル */
 #send:active {
-    transform: scale(0.95);
+  transform: scale(0.95);
 }
 
+/* モバイル端末向けのレスポンシブデザイン */
 @media (max-width: 480px) {
-    #chat-container {
-        width: 100%;
-        height: 100vh;
-        border-radius: 0;
-    }
+  #chat-container {
+    width: 100%;
+    height: 100vh;
+    border-radius: 0;
+  }
 
-    .message-container {
-        max-width: 90%;
-    }
+  .message-container {
+    max-width: 90%;
+  }
 }

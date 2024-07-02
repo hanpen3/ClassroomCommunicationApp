@@ -1,72 +1,84 @@
+/* ボディ全体のスタイル設定 */
 body {
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
     background-color: #f0f0f0;
-}
-
-.container {
+  }
+  
+  /* コンテンツの最大幅とセンタリング */
+  .container {
     max-width: 1200px;
     margin: 0 auto;
     padding: 20px;
-}
-
-h1 {
+  }
+  
+  /* メインタイトルのスタイル設定 */
+  h1 {
     text-align: center;
     margin-bottom: 20px;
-}
-
-.main-content {
+  }
+  
+  /* メインコンテンツエリアのレイアウト設定 */
+  .main-content {
     display: flex;
     gap: 20px;
-}
-
-.left-panel {
+  }
+  
+  /* 左パネルのスタイル設定 */
+  .left-panel {
     flex: 2;
     display: flex;
     flex-direction: column;
-}
-
-.right-panel {
+  }
+  
+  /* 右パネルのスタイル設定 */
+  .right-panel {
     flex: 1;
     display: flex;
     flex-direction: column;
     gap: 20px;
-}
-
-#versatile-space, #chat-display, #question-display {
+  }
+  
+  /* 汎用スペース、チャット表示、質問表示エリアの共通スタイル */
+  #versatile-space, #chat-display, #question-display {
     background-color: white;
     border: 1px solid #ccc;
     padding: 20px;
     border-radius: 5px;
     min-height: 300px;
-}
-
-#versatile-space {
+  }
+  
+  /* 汎用スペースの追加スタイル */
+  #versatile-space {
     flex-grow: 1;
     margin-bottom: 20px;
-}
-
-.bottom-panel {
+  }
+  
+  /* 下部パネルのレイアウト設定 */
+  .bottom-panel {
     display: flex;
     justify-content: space-between;
     align-items: center;
-}
-
-button {
+  }
+  
+  /* ボタンの共通スタイル設定 */
+  button {
     padding: 10px 15px;
     background-color: #007bff;
     color: white;
     border: none;
     border-radius: 5px;
     cursor: pointer;
-}
-
-button:hover {
+  }
+  
+  /* ボタンのホバー時のスタイル */
+  button:hover {
     background-color: #0056b3;
-}
-
-#chat-display, #question-display {
+  }
+  
+  /* チャット表示と質問表示エリアのスクロール設定 */
+  #chat-display, #question-display {
     height: 300px;
     overflow-y: auto;
-}
+  }
