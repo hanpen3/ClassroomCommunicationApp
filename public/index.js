@@ -12,7 +12,8 @@ audienceButton.onclick = () => {
 
 // 「主催者」ボタンを押したときの処理
 hostButton.onclick = () => {
-    window.open("host.html", null, "top=0,left=" + (screen.width - 500) + ",width=" + "500" + ",height=" + screen.availHeight);
+    var oneTimePass = prompt("ワンタイムパスワードを入力してください");
+    if(true/* サーバのワンタイムパスワードと一致したら開くようにしたい...! */) window.open("host.html", null, "top=0,left=" + (screen.width - 500) + ",width=" + "500" + ",height=" + screen.availHeight);
 };
 
 messageInput.addEventListener('keypress', (event) => {
