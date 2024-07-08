@@ -6,10 +6,10 @@ messageInput.style.height = (window.innerHeight * 0.05) + "px";
 messageInput.style.width = (window.innerWidth * 0.7) + "px";
 const commentButton = document.getElementById('comment');
 commentButton.style.height = (window.innerHeight * 0.05) + "px";
-commentButton.style.width = (window.innerWidth * 0.2) + "px";
+commentButton.style.width = (window.innerWidth * 0.3) + "px";
 const questionButton = document.getElementById('question');
 questionButton.style.height = (window.innerHeight * 0.05) + "px";
-questionButton.style.width = (window.innerWidth * 0.2) + "px";
+questionButton.style.width = (window.innerWidth * 0.3) + "px";
 
 
 const hostname = window.location.hostname;

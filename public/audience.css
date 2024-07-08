@@ -168,7 +168,7 @@ body {
   color: white;
   border: none;
   border-radius: 25px;
-  font-size: 12px;
+  font-size: 16px;
   cursor: pointer;
   transition: background-color 0.3s, transform 0.1s;
 }
@@ -191,7 +191,7 @@ body {
   color: white;
   border: none;
   border-radius: 25px;
-  font-size: 12px;
+  font-size: 16px;
   cursor: pointer;
   transition: background-color 0.3s, transform 0.1s;
 }
