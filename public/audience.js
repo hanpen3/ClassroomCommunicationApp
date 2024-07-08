@@ -54,6 +54,7 @@ ws.onmessage = (event) => {
     }else if(type==="question"){
         const message = document.createElement('div');
         message.textContent = name+": "+content; // メッセージを文字列として処理
+        message.style.color = 'red';
         chat.appendChild(message);
         chat.scrollTop = chat.scrollHeight;
     }
