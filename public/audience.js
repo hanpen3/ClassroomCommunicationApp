@@ -19,7 +19,7 @@ var username = prompt("ユーザー名");
 
 ws.onopen = () => {
     ws.send(username + " さんが参加しました");
-}
+};
 
 window.onbeforeunload = () => {
     ws.send(username + " さんが退出しました");
