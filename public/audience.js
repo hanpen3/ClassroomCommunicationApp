@@ -89,6 +89,7 @@ ws.onmessage = (event) => {
        image.width=30;
        image.height=30;
        chat.appendChild(image);
+       chat.scrollTop = chat.scrollHeight;
     }
 };
 

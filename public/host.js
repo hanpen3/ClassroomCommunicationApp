@@ -70,6 +70,7 @@ document.addEventListener('DOMContentLoaded', function() {
                  image.src="./images/clear_heart.png";
             }
             mainSpace.appendChild(image);
+            mainSpace.scrollTop = mainSpace.scrollHeight;
         }
        
     };
