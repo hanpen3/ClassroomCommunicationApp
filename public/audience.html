@@ -7,9 +7,9 @@
   <link rel="stylesheet" href="audience.css">
   <style>
     body { font-family: Arial, sans-serif; }
-    #chat-container { display: flex; justify-content: center; align-items: flex-end; }
+    #chat-container { display: flex; justify-content: center; align-items: center; }
     #chat { width: 300px; height: 400px; border: 1px solid #ccc; overflow-y: auto; display: flex; flex-direction: column; justify-content: flex-end; padding: 10px; }
-    #input-container { display: flex; justify-content: center; margin-top: 10px; }
+    #input-container { display: flex;  justify-content: center; margin-top: 10px; }
     #message { width: 240px; }
   </style>
 </head>
@@ -19,7 +19,21 @@
   </div>
   <div id="input-container">
     <input type="text" id="message" placeholder="メッセージを入力してください">
-    <button id="send">送信</button>
+  </div>
+
+  <table>
+    <tr>
+      <td><button id="comment">コメントする</button></td>
+      <td> <button id="question">質問する</button></td>
+    </tr> 
+  </table>
+
+  <div id = "reaction">
+    <input type="image" src="./images/good.jpg" alt="good">
+    <input type="image" src="./images/bad.jpg" alt="bad">
+    <input type="image" src="./images/hatena.jpg" alt="hatena">
+    <input type="image" src="./images/bikkuri.jpg" alt="bikkuri">
+    <input type="image" src="./images/heart.jpg" alt="heart">
   </div>
 
   <script src="audience.js"></script>

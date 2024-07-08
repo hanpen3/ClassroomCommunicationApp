@@ -22,7 +22,7 @@ body {
 #chat-container {
   width: 100%;
   max-width: 440px;
-  height: 100vh;
+  height: 70vh;
   background-color: #b3cefb;
   display: flex;
   flex-direction: column;
@@ -160,26 +160,49 @@ body {
   border-color: #00a8ff;
 }
 
-/* 送信ボタンのスタイル設定 */
-#send {
+/* コメントボタンのスタイル設定 */
+#comment {
   margin-left: 10px;
   padding: 12px 20px;
   background-color: #00a8ff;
   color: white;
   border: none;
   border-radius: 25px;
-  font-size: 16px;
+  font-size: 12px;
   cursor: pointer;
   transition: background-color 0.3s, transform 0.1s;
 }
 
-/* 送信ボタンのホバー時のスタイル */
-#send:hover {
+/* コメントボタンのホバー時のスタイル */
+#comment:hover {
   background-color: #0097e6;
 }
 
-/* 送信ボタンのクリック時のスタイル */
-#send:active {
+/* コメントボタンのクリック時のスタイル */
+#comment:active {
+  transform: scale(0.95);
+}
+
+/* 質問ボタンのスタイル設定 */
+#question {
+  margin-left: 10px;
+  padding: 12px 20px;
+  background-color: #00a8ff;
+  color: white;
+  border: none;
+  border-radius: 25px;
+  font-size: 12px;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.1s;
+}
+
+/* 質問ボタンのホバー時のスタイル */
+#question:hover {
+  background-color: #0097e6;
+}
+
+/* 質問ボタンのクリック時のスタイル */
+#question:active {
   transform: scale(0.95);
 }
 
