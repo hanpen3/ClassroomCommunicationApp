@@ -18,18 +18,46 @@ const ws = new WebSocket(`ws://${hostname}:3000`);
 var username = prompt("ユーザー名");
 
 ws.onopen = () => {
-    ws.send(username + " さんが参加しました");
+    const message = username + " さんが参加しました";
+    const obj = {
+        type: 'log', 
+        content: message
+    }
+    ws.send(JSON.stringify(obj));
 };
 
 window.onbeforeunload = () => {
-    ws.send(username + " さんが退出しました");
+    const message = username + " さんが退出しました";
+    const obj = {
+        type: 'log',
+        content: message
+    }
+    ws.send(JSON.stringify(obj));
 };
 
 ws.onmessage = (event) => {
-    const message = document.createElement('div');
-    message.textContent = event.data; // メッセージを文字列として処理
-    chat.appendChild(message);
-    chat.scrollTop = chat.scrollHeight;
+    const obj=JSON.parse(event.data); //JSON形式からオブジェクトに
+    const type = obj.type; //データのタイプ
+    const name = obj.name;
+    const content = obj.content; //データの内容
+
+    if(type==="log"){
+        const message = document.createElement('div');
+        message.textContent = content; // メッセージを文字列として処理
+        chat.appendChild(message);
+        chat.scrollTop = chat.scrollHeight;
+    }else if(type==="comment"){
+        const message = document.createElement('div');
+        message.textContent = name+": "+content; // メッセージを文字列として処理
+        chat.appendChild(message);
+        chat.scrollTop = chat.scrollHeight;
+    }else if(type==="question"){
+        const message = document.createElement('div');
+        message.textContent = name+": "+content; // メッセージを文字列として処理
+        chat.appendChild(message);
+        chat.scrollTop = chat.scrollHeight;
+    }
+   
 };
 
 /* クライアントがサーバーによって切断される場合の処理 */
@@ -43,7 +71,25 @@ ws.onclose = (event) => {
 commentButton.onclick = () => {
     const message = messageInput.value;
     if (message) {
-    ws.send(username + ": " + message); // 文字列として送信
+        const obj = {
+            type: 'comment', 
+            name: username, 
+            content: message
+        }
+        ws.send(JSON.stringify(obj)); // JSON形式で送信
+    messageInput.value = '';
+    }
+};
+
+questionButton.onclick = () => {
+    const message = messageInput.value;
+    if (message) {
+        const obj = {
+            type: 'question', 
+            name: username, 
+            content: message
+        }
+        ws.send(JSON.stringify(obj)); // JSON形式で送信
     messageInput.value = '';
     }
 };

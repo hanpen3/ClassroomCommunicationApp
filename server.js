@@ -24,10 +24,11 @@ wss.on('connection', (ws) => {
     clients.push(ws);
 
     ws.on('message', (message) => {
-        console.log(`Received: ${message}`);
+        const data=JSON.parse(message); //JSON形式で解析
+        console.log(`Received: ${data}`);
         wss.clients.forEach((client) => {
             if (client.readyState === WebSocket.OPEN) {
-                client.send(message.toString()); // 文字列として送信
+                client.send(JSON.stringify(data)); // JSON形式で送信
             }
         });
     });
