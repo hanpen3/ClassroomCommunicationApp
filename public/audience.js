@@ -17,6 +17,21 @@ const ws = new WebSocket(`ws://${hostname}:3000`);
 
 var username = prompt("ユーザー名");
 
+/*リアクションクリック時に実行する関数*/
+function reactionClickListener(e){
+    const id = e.target.getAttribute("id"); //クリックされた画像のidを得る
+    const obj = {
+        type: 'reaction',  
+        content: id
+    }
+    ws.send(JSON.stringify(obj)); // JSON形式で送信
+}
+
+/*イベントリスナーを紐づける */
+document.querySelectorAll('.reaction').forEach((element) => {
+    element.addEventListener('click', reactionClickListener);
+})
+
 ws.onopen = () => {
     const message = username + " さんが参加しました";
     const obj = {
@@ -57,8 +72,24 @@ ws.onmessage = (event) => {
         message.style.color = 'red';
         chat.appendChild(message);
         chat.scrollTop = chat.scrollHeight;
+    }else if(type==="reaction"){
+       /*リアクションを動かすのができないです */
+       const image = document.createElement('img');
+       if(content==="good"){
+            image.src="./images/clear_good.png";
+       }else if(content==="bad"){
+            image.src="./images/clear_bad.png";
+       }else if(content==="hatena"){
+            image.src="./images/clear_hatena.png";
+       }else if(content==="bikkuri"){
+            image.src="./images/clear_bikkuri.png";
+       }else if(content==="heart"){
+            image.src="./images/clear_heart.png";
+       }
+       image.width=30;
+       image.height=30;
+       chat.appendChild(image);
     }
-   
 };
 
 /* クライアントがサーバーによって切断される場合の処理 */
@@ -100,3 +131,4 @@ messageInput.addEventListener('keypress', (event) => {
     commentButton.click();
     }
 });
+

@@ -55,6 +55,21 @@ document.addEventListener('DOMContentLoaded', function() {
             message.textContent = name+": "+content; // メッセージを文字列として処理
             questions.appendChild(message);
             questions.scrollTop = questions.scrollHeight;
+        }else if(type==="reaction"){
+           /*リアクションを表示する */
+            const image = document.createElement('img');
+            if(content==="good"){
+                 image.src="./images/clear_good.png";
+            }else if(content==="bad"){
+                 image.src="./images/clear_bad.png";
+            }else if(content==="hatena"){
+                 image.src="./images/clear_hatena.png";
+            }else if(content==="bikkuri"){
+                 image.src="./images/clear_bikkuri.png";
+            }else if(content==="heart"){
+                 image.src="./images/clear_heart.png";
+            }
+            mainSpace.appendChild(image);
         }
        
     };
