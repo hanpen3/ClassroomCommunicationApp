@@ -8,6 +8,14 @@ document.addEventListener('DOMContentLoaded', function() {
     const hostname = window.location.hostname;
     const ws = new WebSocket(`ws://${hostname}:3000`);
 
+    /*自分が主催者であることをサーバに送信 */
+    ws.onopen = () => {
+        const obj = {
+            type: 'host'
+        }
+        ws.send(JSON.stringify(obj)); // JSON形式で送信
+    }
+    
     //◎主催者はユーザ名の入力、入退出のログ必要？？
 
     // var username = prompt("ユーザー名");
@@ -75,6 +83,7 @@ document.addEventListener('DOMContentLoaded', function() {
             mainSpace.appendChild(image);
             mainSpace.scrollTop = mainSpace.scrollHeight;
         }
+       
     };
     
     /* ホストがサーバーによって切断される場合の処理 */
@@ -101,6 +110,29 @@ document.addEventListener('DOMContentLoaded', function() {
                 .then(response => response.text())
                 .then(data => {
                     console.log(data);
+
+                    /*コメントと質問のログを取得する処理を追加*/
+                    var Items = chatMessages.querySelectorAll('div');
+                    let chatContent='';
+                    chatContent+='【コメント】\n'
+                    Items.forEach(item => {
+                        chatContent += item.textContent+'\n'
+                    });
+                    chatContent+='\n【質問】\n'
+                    Items = questions.querySelectorAll('div');
+                    Items.forEach(item => {
+                        chatContent += item.textContent+'\n'
+                    });
+                    const blob = new Blob([chatContent], { type: 'text/plain' });
+                    const url = URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = 'comments_questions_log.txt';
+                    a.click();
+                    URL.revokeObjectURL(url);
+
+                    
+
                     window.location.href = './events/end-event.html';
                 })
                 .catch(error => console.error('Error:', error));
