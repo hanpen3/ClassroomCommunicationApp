@@ -106,8 +106,77 @@ document.addEventListener('DOMContentLoaded', function() {
         window.location.href = './events/worksheet.html';
     });
     
+    //投票ボタンが押された場合(汎用スペースに投票の設定を表示できるようにする)
     voteBtn.addEventListener('click', () => {
-        window.location.href = './events/vote.html';
+        mainSpace.innerHTML=''; //mainSpaceを空にする
+        const form=document.createElement('form');
+
+        const titleLabel=document.createElement('label');
+        titleLabel.textContent = '投票のお題: ';
+        const titleInput = document.createElement('input');
+        titleInput.type = 'text';
+        titleInput.id = 'voteTitle';
+        form.appendChild(titleLabel);
+        form.appendChild(titleInput);
+        form.appendChild(document.createElement('br')); //改行
+        
+        const optionsLabel = document.createElement('label');
+        optionsLabel.textContent = '択数: ';
+        const optionsSelect = document.createElement('select');
+        optionsSelect.id = 'optionsNumber';
+        for (let i = 2; i <= 8; i++) {
+            const option = document.createElement('option');
+            option.value = i;
+            option.textContent = i;
+            optionsSelect.appendChild(option);
+        }
+        form.appendChild(optionsLabel);
+        form.appendChild(optionsSelect);
+        form.appendChild(document.createElement('br'));
+
+        const optionsContainer = document.createElement('div');
+        optionsContainer.id = 'optionsContainer';
+        form.appendChild(optionsContainer);
+        form.appendChild(document.createElement('br'));
+
+        const multipleLabel = document.createElement('label');
+        multipleLabel.textContent = '複数選択可: ';
+        const multipleCheckbox = document.createElement('input');
+        multipleCheckbox.type = 'checkbox';
+        multipleCheckbox.id = 'multipleSelection';
+        form.appendChild(multipleLabel);
+        form.appendChild(multipleCheckbox);
+        form.appendChild(document.createElement('br'));
+
+        const startButton = document.createElement('button');
+        startButton.type = 'button';
+        startButton.textContent = '投票を開催';
+        startButton.id = 'startVoteButton';
+        form.appendChild(startButton);
+
+        mainSpace.appendChild(form);
+
+        /*選択肢の個数の更新（択数の変化に応じて）*/
+        function updateOptions() {
+            const optionsNumber = parseInt(optionsSelect.value);
+            optionsContainer.innerHTML = '';
+            for (let i = 0; i < optionsNumber; i++) {
+                const optionLabel = document.createElement('label');
+                optionLabel.textContent = `選択肢${i + 1}: `;
+                const optionInput = document.createElement('input');
+                optionInput.type = 'text';
+                optionInput.name = `option${i + 1}`;
+                optionsContainer.appendChild(optionLabel);
+                optionsContainer.appendChild(optionInput);
+                optionsContainer.appendChild(document.createElement('br'));
+            }
+        }
+        updateOptions();
+        optionsSelect.addEventListener('change', updateOptions);
+
+        mainSpace.scrollTop = mainSpace.scrollHeight;
+        
+        //window.location.href = './events/vote.html';
     });
     
     /* イベント終了ボタンで全クライアントの接続を切断 */
