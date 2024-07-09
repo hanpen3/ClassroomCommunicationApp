@@ -12,7 +12,9 @@ var passInput
 
 /* 「オーディエンス」ボタンを押したときの処理 */
 audienceButton.onclick = () => {
-    window.open("audience.html", null, "top=0,left=" + (screen.width - 500) + ",width=" + "500" + ",height=" + screen.availHeight);
+    window.open("audience.html", "_blank", "top=0,left=" + (screen.width - 500) + ",width=" + "500" + ",height=" + screen.availHeight);
+    // window.resizeTo(500, screen.availHeight);
+    // window.moveTo(0, 0); 
 };
 
 /* 「主催者」ボタンを押したときの処理 */
@@ -24,7 +26,7 @@ hostButton.onclick = () => {
         content: 'demand'
     }
     ws.send(JSON.stringify(demandObj)); // JSON形式で送信
-    
+
     passInput = prompt("ワンタイムパスワードを入力してください");
     
     const obj = {

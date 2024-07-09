@@ -44,6 +44,19 @@ wss.on('connection', (ws) => {
             }
             console.log("voteを送信しました");
             break;
+        case 'worksheet': //ワークシートの内容を受信
+        console.log('Received worksheet content: ' + data.content);
+        // ワークシートの内容を全クライアントに送信
+        wss.clients.forEach((client) => {
+            if (client.readyState === WebSocket.OPEN) {
+                client.send(JSON.stringify({
+                    type: 'worksheet',
+                    name: 'server',
+                    content: data.content
+                }));
+            }
+        });
+        break;
         case 'passCheck':
             sobj = {
                 type: 'passSend',
@@ -71,6 +84,10 @@ wss.on('connection', (ws) => {
     /* クライアント切断時の動作 */
     ws.on('close', () => {
         console.log('Client disconnected');
+        // num_of_connection--;
+
+        // updateConnectionCount(); //同時接続数の更新
+        
         clients = clients.filter(client => client !== ws);
     });
 });

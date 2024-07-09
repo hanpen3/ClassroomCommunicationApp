@@ -82,7 +82,11 @@ ws.onmessage = (event) => {
         message.style.color = 'red';
         chat.appendChild(message);
         chat.scrollTop = chat.scrollHeight;
-    }else if(type==="reaction"){
+    }else if(type==="worksheet"){
+        const popup = window.open("./audience-events/worksheet.html", "_blank", "top=0,left=0,width=" + "500" + ",height=500");
+        popup.onload = () => popup.postMessage(content, window.location.origin);
+    }else if(type==="reaction")
+        {
        /*リアクションを動かすのができないです */
         const image = document.createElement('img');
         if(content==="good"){
