@@ -11,31 +11,89 @@ const wss = new WebSocket.Server({ server });
 app.use(express.static('public')); // 提供ディレクトリを'public'に設定
 
 let clients = [];
+var num_of_connected = 0;
+var oneTimePass;
+let host;
 
-// 30s毎に４桁の乱数を出力
-setInterval(() => {
-    const oneTimePass = Math.floor(1000 + Math.random() * 9000);
+function setOnetimePass() {
+    oneTimePass = Math.floor(1000 + Math.random() * 9000);
     console.log(`Generated one-time-password : ${oneTimePass}`);
-}, 30000);
+}
 
 /* クライアント接続時の動作 */
 wss.on('connection', (ws) => {
     console.log('Client connected');
+    num_of_connected++;
+    console.log(num_of_connected);
     clients.push(ws);
+
+    // 接続人数の送信
+    const updateConnectionCount = () => {
+        const obj = {
+            type: 'connection',
+            name: '',
+            content: num_of_connected
+        };
+        clients.forEach(client => {
+            if (client.readyState === WebSocket.OPEN) {
+                client.send(JSON.stringify(obj)); // JSON形式で送信
+            }
+        });
+    };
+
+    updateConnectionCount(); // 同時接続数の更新
 
     ws.on('message', (message) => {
         const data=JSON.parse(message); //JSON形式で解析
-        console.log(`Received: ${data}`);
-        wss.clients.forEach((client) => {
-            if (client.readyState === WebSocket.OPEN) {
-                client.send(JSON.stringify(data)); // JSON形式で送信
+        const type = data.type;
+        const name = data.name;
+        const content = data.content;
+
+        console.log(`MessageReceived type:${type}, name:${name}, "${content}"`);
+
+        switch(type) {
+        case 'host': /*ホストの登録*/
+            host=ws;
+            console.log("ホストが登録されました");
+            break;
+        case 'vote': //ホストのみに送るものはここに書く(投票、ワークシート)
+            if (host.readyState === WebSocket.OPEN) {
+                host.send(JSON.stringify(data)); // JSON形式で送信
             }
-        });
+            console.log("voteを送信しました");
+            break;
+        case 'passCheck':
+            const sobj = {
+                type: 'passSend',
+                name: 'server',
+                content: oneTimePass
+            }
+            wss.clients.forEach((client) => {
+                if (client.readyState === WebSocket.OPEN) {
+                    client.send(JSON.stringify(sobj)); // JSON形式で送信
+                }
+            });
+            break;
+        case 'passDemand':
+            setOnetimePass();
+            break;
+        default: //コメント・質問など全クライアントとホストに送るもの
+            wss.clients.forEach((client) => {
+                if (client.readyState === WebSocket.OPEN) {
+                    client.send(JSON.stringify(data)); // JSON形式で送信
+                }
+            });
+        }
     });
 
     /* クライアント切断時の動作 */
     ws.on('close', () => {
         console.log('Client disconnected');
+        num_of_connected--;
+        console.log(num_of_connected);
+
+        updateConnectionCount(); // 同時接続数の更新
+        
         clients = clients.filter(client => client !== ws);
     });
 });
