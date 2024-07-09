@@ -113,6 +113,29 @@ document.addEventListener('DOMContentLoaded', function() {
                 .then(response => response.text())
                 .then(data => {
                     console.log(data);
+
+                    /*コメントと質問のログを取得する処理を追加*/
+                    var Items = chatMessages.querySelectorAll('div');
+                    let chatContent='';
+                    chatContent+='【コメント】\n'
+                    Items.forEach(item => {
+                        chatContent += item.textContent+'\n'
+                    });
+                    chatContent+='\n【質問】\n'
+                    Items = questions.querySelectorAll('div');
+                    Items.forEach(item => {
+                        chatContent += item.textContent+'\n'
+                    });
+                    const blob = new Blob([chatContent], { type: 'text/plain' });
+                    const url = URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = 'comments_questions_log.txt';
+                    a.click();
+                    URL.revokeObjectURL(url);
+
+                    
+
                     window.location.href = './events/end-event.html';
                 })
                 .catch(error => console.error('Error:', error));
