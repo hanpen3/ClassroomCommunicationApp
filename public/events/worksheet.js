@@ -30,12 +30,13 @@ document.addEventListener('DOMContentLoaded', function() {
         worksheetText.value = savedWorksheet;
     }
 
-    // ワークシートの内容をaudienceに送信
+    // ワークシートの内容をserverに送信
     send.onclick = () => {
         const message = messageInput.value;
         if (message) {
             const obj = {
                 type: 'worksheet', 
+                name: 'server',
                 content: message
             }
             ws.send(JSON.stringify(obj)); // JSON形式で送信

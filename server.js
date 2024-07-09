@@ -62,6 +62,8 @@ wss.on('connection', (ws) => {
             }
             console.log("voteを送信しました");
             break;
+        case 'worksheet': //ワークシートの内容を受信
+                console.log('Received worksheet content: ' + data.content);
         case 'passCheck':
             const sobj = {
                 type: 'passSend',
