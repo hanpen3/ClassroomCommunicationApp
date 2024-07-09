@@ -1,12 +1,9 @@
 document.addEventListener('DOMContentLoaded', function() {
-    const connectionCount = document.getElementById('connection-count');
     const worksheetBtn = document.getElementById('worksheet-btn');
     const voteBtn = document.getElementById('vote-btn');
     const endEventBtn = document.getElementById('end-event-btn');
     const chatMessages = document.getElementById('chat-messages');
     const questions = document.getElementById('questions');
-
-    let connectedUsers = 0;
 
     const hostname = window.location.hostname;
     const ws = new WebSocket(`ws://${hostname}:3000`);
@@ -46,33 +43,38 @@ document.addEventListener('DOMContentLoaded', function() {
             chatMessages.appendChild(message);
             chatMessages.scrollTop = chatMessages.scrollHeight;
         }else if(type==="comment"){
+            /*コメントの処理*/
             const message = document.createElement('div');
             message.textContent = name+": "+content; // メッセージを文字列として処理
             chatMessages.appendChild(message);
             chatMessages.scrollTop = chatMessages.scrollHeight;
         }else if(type==="question"){
+            /*質問の処理*/
             const message = document.createElement('div');
             message.textContent = name+": "+content; // メッセージを文字列として処理
             questions.appendChild(message);
             questions.scrollTop = questions.scrollHeight;
+        }else if(type==="connection"){
+            /*同時接続数の更新*/
+            const connectionCount = document.getElementById('connection-count');
+            connectionCount.textContent = `接続: ${content - 1}人`; // 文字列として処理 : 主催者も含まれるので、-1 する
         }else if(type==="reaction"){
-           /*リアクションを表示する */
+            /*リアクションを表示する */
             const image = document.createElement('img');
             if(content==="good"){
-                 image.src="./images/clear_good.png";
+                image.src="./images/clear_good.png";
             }else if(content==="bad"){
-                 image.src="./images/clear_bad.png";
+                image.src="./images/clear_bad.png";
             }else if(content==="hatena"){
-                 image.src="./images/clear_hatena.png";
+                image.src="./images/clear_hatena.png";
             }else if(content==="bikkuri"){
-                 image.src="./images/clear_bikkuri.png";
+                image.src="./images/clear_bikkuri.png";
             }else if(content==="heart"){
-                 image.src="./images/clear_heart.png";
+                image.src="./images/clear_heart.png";
             }
             mainSpace.appendChild(image);
             mainSpace.scrollTop = mainSpace.scrollHeight;
         }
-       
     };
     
     /* ホストがサーバーによって切断される場合の処理 */
@@ -82,12 +84,6 @@ document.addEventListener('DOMContentLoaded', function() {
         chatMessages.appendChild(message);
         chatMessages.scrollTop = chatMessages.scrollHeight;
     };
-    
-    // 接続人数の更新（デモ用）
-    setInterval(() => {
-        connectedUsers = Math.floor(Math.random() * 100);
-        connectionCount.textContent = `接続: ${connectedUsers}人`;
-    }, 5000);
 
     // ボタンのクリックイベント
     worksheetBtn.addEventListener('click', () => {

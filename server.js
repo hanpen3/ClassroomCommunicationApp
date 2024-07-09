@@ -11,6 +11,7 @@ const wss = new WebSocket.Server({ server });
 app.use(express.static('public')); // 提供ディレクトリを'public'に設定
 
 let clients = [];
+var num_of_connected = 0;
 
 // 30s毎に４桁の乱数を出力
 setInterval(() => {
@@ -21,7 +22,25 @@ setInterval(() => {
 /* クライアント接続時の動作 */
 wss.on('connection', (ws) => {
     console.log('Client connected');
+    num_of_connected++;
+    console.log(num_of_connected);
     clients.push(ws);
+
+    // 接続人数の送信
+    const updateConnectionCount = () => {
+        const obj = {
+            type: 'connection',
+            name: '',
+            content: num_of_connected
+        };
+        clients.forEach(client => {
+            if (client.readyState === WebSocket.OPEN) {
+                client.send(JSON.stringify(obj)); // JSON形式で送信
+            }
+        });
+    };
+
+    updateConnectionCount(); // 同時接続数の更新
 
     ws.on('message', (message) => {
         const data=JSON.parse(message); //JSON形式で解析
@@ -36,6 +55,11 @@ wss.on('connection', (ws) => {
     /* クライアント切断時の動作 */
     ws.on('close', () => {
         console.log('Client disconnected');
+        num_of_connected--;
+        console.log(num_of_connected);
+
+        updateConnectionCount(); // 同時接続数の更新
+        
         clients = clients.filter(client => client !== ws);
     });
 });
