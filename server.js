@@ -23,25 +23,7 @@ function setOnetimePass() {
 /* クライアント接続時の動作 */
 wss.on('connection', (ws) => {
     console.log('Client connected');
-    //num_of_connection++;
     clients.push(ws);
-
-    // 接続人数の送信
-    /*const updateConnectionCount = () => {
-        console.log(num_of_connection);
-        const obj = {
-            type: 'connection',
-            name: '',
-            content: num_of_connection
-        };
-        clients.forEach(client => {
-            if (client.readyState === WebSocket.OPEN) {
-                client.send(JSON.stringify(obj)); // JSON形式で送信
-            }
-        });
-    };*/
-
-    //updateConnectionCount(); // 同時接続数の更新
 
     ws.on('message', (message) => {
         const data=JSON.parse(message); //JSON形式で解析
@@ -102,9 +84,6 @@ wss.on('connection', (ws) => {
     /* クライアント切断時の動作 */
     ws.on('close', () => {
         console.log('Client disconnected');
-        // num_of_connection--;
-
-        // updateConnectionCount(); // 同時接続数の更新
         
         clients = clients.filter(client => client !== ws);
     });
