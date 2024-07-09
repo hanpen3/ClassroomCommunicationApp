@@ -113,13 +113,19 @@ document.addEventListener('DOMContentLoaded', function() {
         titleInput.id = 'worksheetTitle';
         form.appendChild(titleLabel);
         form.appendChild(titleInput);
-        form.appendChild(document.createElement('br')); //改行
+        form.appendChild(document.createElement('br'));
 
         const startButton = document.createElement('button');
         startButton.type = 'button';
         startButton.textContent = 'ワークシートを実施';
         startButton.id = 'startWorkSheetButton';
         form.appendChild(startButton);
+
+        const quitButton = document.createElement('button');
+        quitButton.type = 'button';
+        quitButton.textContent = 'やめる';
+        quitButton.id = 'quitWorkSheetButton';
+        form.appendChild(quitButton);
 
         mainSpace.appendChild(form);
         mainSpace.scrollTop = mainSpace.scrollHeight;
@@ -131,14 +137,19 @@ document.addEventListener('DOMContentLoaded', function() {
                 const obj = {
                     type: 'worksheet', 
                     name: 'server',
-                    content: message
+                    content: message //お題
                 }
                 ws.send(JSON.stringify(obj)); // JSON形式で送信
-                titleInput.value = '';
+                mainSpace.innerHTML=''; //汎用スペースをクリア
                 alert('ワークシートの内容が送信されました！');
             }else {
                 alert('ワークシートの内容が空です。');
             }
+        };
+
+        quitButton.onclick = () => {
+            mainSpace.innerHTML=''; //汎用スペースをクリア
+            alert('ワークシートの作成をやめました！');
         };
 
     });
@@ -187,11 +198,32 @@ document.addEventListener('DOMContentLoaded', function() {
         form.appendChild(multipleCheckbox);
         form.appendChild(document.createElement('br'));
 
+        const timeLimitLabel = document.createElement('label');
+        timeLimitLabel.textContent = '制限時間: ';
+        const timeLimitSelect = document.createElement('select');
+        timeLimitSelect.id = 'timeLimit';
+        const timeLimits = [30, 60, 90, 120];
+        timeLimits.forEach(time => {
+            const option = document.createElement('option');
+            option.value = time;
+            option.textContent = `${time}秒`;
+            timeLimitSelect.appendChild(option);
+        });
+        form.appendChild(timeLimitLabel);
+        form.appendChild(timeLimitSelect);
+        form.appendChild(document.createElement('br'));
+
         const startButton = document.createElement('button');
         startButton.type = 'button';
         startButton.textContent = '投票を開催';
         startButton.id = 'startVoteButton';
         form.appendChild(startButton);
+
+        const quitButton = document.createElement('button');
+        quitButton.type = 'button';
+        quitButton.textContent = 'やめる';
+        quitButton.id = 'quitVoteButton';
+        form.appendChild(quitButton);
 
         mainSpace.appendChild(form);
 
@@ -205,6 +237,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 const optionInput = document.createElement('input');
                 optionInput.type = 'text';
                 optionInput.name = `option${i + 1}`;
+                optionInput.classList.add('optionInput');
                 optionsContainer.appendChild(optionLabel);
                 optionsContainer.appendChild(optionInput);
                 optionsContainer.appendChild(document.createElement('br'));
@@ -214,19 +247,41 @@ document.addEventListener('DOMContentLoaded', function() {
         optionsSelect.addEventListener('change', updateOptions);
         mainSpace.scrollTop = mainSpace.scrollHeight;
 
+        /*投票についての情報をサーバに送信*/
         startButton.onclick = () => {
-            const message = titleInput.value;
-            const 
+            const voteTitle = titleInput.value; //投票のタイトル
+            const optionsNumber = optionsSelect.value; //択数
+            const multipleSelection = multipleCheckbox.checked; //複数選択か否か(チェックされていたらtrue)
+            const timeLimit = timeLimitSelect.value; //制限時間
+            const optionInputs = document.querySelectorAll('.optionInput');
+            const options = Array.from(optionInputs).map(input => input.value); //選択肢の配列を作成
 
-            const info={ //投票に関する情報
+            /*入力が空の場合は警告*/
+            if(!voteTitle){
+                alert('必要な項目を入力してください。');
+                return;
+            }
 
+            for (let i = 0; i < options.length; i++) {
+                if (!options[i]) {
+                    alert(`選択肢を入力してください。`);
+                    return;
+                }
+            }
+
+            const info = { //投票に関する情報
+                title: titleInput.value,  
+                number: optionsSelect.value,
+                options: options,
+                multi: multipleCheckbox.checked,
+                time: timeLimitSelect.value
             }
 
             if (info) {
                 const obj = {
                     type: 'vote', 
                     name: 'server',
-                    content: message
+                    content: info
                 }
                 ws.send(JSON.stringify(obj)); // JSON形式で送信
                 titleInput.value = '';
@@ -234,11 +289,19 @@ document.addEventListener('DOMContentLoaded', function() {
             }else {
                 alert('投票が開催できませんでした。');
             }
+
+            mainSpace.innerHTML=''; //汎用スペースをクリア
         };
 
+        quitButton.onclick = () => {
+            mainSpace.innerHTML=''; //汎用スペースをクリア
+            alert('投票の作成をやめました！');
+        };
         
         //window.location.href = './events/vote.html';
     });
+
+    
     
     /* イベント終了ボタンで全クライアントの接続を切断 */
     endEventBtn.addEventListener('click', () => {
