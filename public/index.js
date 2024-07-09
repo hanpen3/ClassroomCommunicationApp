@@ -12,8 +12,21 @@ audienceButton.onclick = () => {
 
 /* 「主催者」ボタンを押したときの処理 */
 hostButton.onclick = () => {
-    var oneTimePass = prompt("ワンタイムパスワードを入力してください");
-    if(true/* サーバのワンタイムパスワードと一致したら開くようにしたい...! */) window.open("host.html", null, "top=0,left=" + (screen.width - 500) + ",width=" + "500" + ",height=" + screen.availHeight);
+    var passInput = prompt("ワンタイムパスワードを入力してください");
+    alert("input = " + passInput);
+    
+    const obj = {
+        type: 'passCheck', 
+        name: username, 
+        content: message
+    }
+    ws.send(JSON.stringify(obj)); // JSON形式で送信
+
+    // if(false) {
+    //     window.open("host.html", null, "top=0,left=" + (screen.width - 500) + ",width=" + "500" + ",height=" + screen.availHeight);
+    // } else {
+    //     alert("パスワードが違います");
+    // }
 };
 
 //？

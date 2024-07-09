@@ -11,11 +11,17 @@ const wss = new WebSocket.Server({ server });
 app.use(express.static('public')); // 提供ディレクトリを'public'に設定
 
 let clients = [];
+var oneTimePass;
 
 // 30s毎に４桁の乱数を出力
-setInterval(() => {
-    const oneTimePass = Math.floor(1000 + Math.random() * 9000);
+function setOnetimePass() {
+    oneTimePass = Math.floor(1000 + Math.random() * 9000);
     console.log(`Generated one-time-password : ${oneTimePass}`);
+}
+
+setOnetimePass();
+setInterval(() => {
+    setOnetimePass();
 }, 30000);
 
 /* クライアント接続時の動作 */
@@ -25,6 +31,10 @@ wss.on('connection', (ws) => {
 
     ws.on('message', (message) => {
         const data=JSON.parse(message); //JSON形式で解析
+        const obj=JSON.parse(message.data); //JSON形式からオブジェクトに
+        const type = obj.type; //データのタイプ
+        const name = obj.name;
+        const content = obj.content; //データの内容
         console.log(`Received: ${data}`);
         wss.clients.forEach((client) => {
             if (client.readyState === WebSocket.OPEN) {

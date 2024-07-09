@@ -59,20 +59,20 @@ document.addEventListener('DOMContentLoaded', function() {
            /*リアクションを表示する */
             const image = document.createElement('img');
             if(content==="good"){
-                 image.src="./images/clear_good.png";
+                image.src="./images/clear_good.png";
             }else if(content==="bad"){
-                 image.src="./images/clear_bad.png";
+                image.src="./images/clear_bad.png";
             }else if(content==="hatena"){
-                 image.src="./images/clear_hatena.png";
+                image.src="./images/clear_hatena.png";
             }else if(content==="bikkuri"){
-                 image.src="./images/clear_bikkuri.png";
+                image.src="./images/clear_bikkuri.png";
             }else if(content==="heart"){
-                 image.src="./images/clear_heart.png";
+                image.src="./images/clear_heart.png";
             }
             mainSpace.appendChild(image);
             mainSpace.scrollTop = mainSpace.scrollHeight;
         }
-       
+        
     };
     
     /* ホストがサーバーによって切断される場合の処理 */

@@ -74,22 +74,22 @@ ws.onmessage = (event) => {
         chat.scrollTop = chat.scrollHeight;
     }else if(type==="reaction"){
        /*リアクションを動かすのができないです */
-       const image = document.createElement('img');
-       if(content==="good"){
+        const image = document.createElement('img');
+        if(content==="good"){
             image.src="./images/clear_good.png";
-       }else if(content==="bad"){
+        }else if(content==="bad"){
             image.src="./images/clear_bad.png";
-       }else if(content==="hatena"){
+        }else if(content==="hatena"){
             image.src="./images/clear_hatena.png";
-       }else if(content==="bikkuri"){
+        }else if(content==="bikkuri"){
             image.src="./images/clear_bikkuri.png";
-       }else if(content==="heart"){
+        }else if(content==="heart"){
             image.src="./images/clear_heart.png";
-       }
-       image.width=30;
-       image.height=30;
-       chat.appendChild(image);
-       chat.scrollTop = chat.scrollHeight;
+        }
+        image.width=30;
+        image.height=30;
+        chat.appendChild(image);
+        chat.scrollTop = chat.scrollHeight;
     }
 };
 
