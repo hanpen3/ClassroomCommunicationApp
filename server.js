@@ -89,8 +89,8 @@ wss.on('connection', (ws) => {
     /* クライアント切断時の動作 */
     ws.on('close', () => {
         console.log('Client disconnected');
-        num_of_connected--;
-        console.log(num_of_connecttion);
+        num_of_connection--;
+        console.log(num_of_connection);
 
         updateConnectionCount(); // 同時接続数の更新
         
