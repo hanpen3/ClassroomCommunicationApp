@@ -74,25 +74,25 @@ ws.onmessage = (event) => {
         chat.scrollTop = chat.scrollHeight;
     }else if(type==="reaction"){
        /*リアクションを動かすのができないです */
-       const image = document.createElement('img');
-       if(content==="good"){
+        const image = document.createElement('img');
+        if(content==="good"){
             image.src="./images/clear_good.png";
-       }else if(content==="bad"){
+        }else if(content==="bad"){
             image.src="./images/clear_bad.png";
-       }else if(content==="hatena"){
+        }else if(content==="hatena"){
             image.src="./images/clear_hatena.png";
-       }else if(content==="bikkuri"){
+        }else if(content==="bikkuri"){
             image.src="./images/clear_bikkuri.png";
-       }else if(content==="heart"){
+        }else if(content==="heart"){
             image.src="./images/clear_heart.png";
-       }
-       image.width=30;
-       image.height=30;
-       image.classList.add('reaction-animation');
-       chat.scrollTop = chat.scrollHeight;
+        }
+        image.width=30;
+        image.height=30;
+        image.classList.add('reaction-animation');
+        chat.scrollTop = chat.scrollHeight;
 
-       const chatContainer = document.getElementById('chat-container');  // チャットコンテナ要素を取得
-       
+        const chatContainer = document.getElementById('chat-container');  // チャットコンテナ要素を取得
+        
 // ランダムな水平位置を設定
 const maxLeft = chatContainer.clientWidth - image.width;  // 最大の左位置
 const randomLeft = Math.floor(Math.random() * maxLeft);  // ランダムな左位置を計算
@@ -101,9 +101,9 @@ image.style.left = `${randomLeft}px`;  // 画像の左位置を設定
        chatContainer.appendChild(image);  // 画像要素をチャットコンテナに追加
 
        // アニメーション終了後に要素を削除
-       setTimeout(() => {
+        setTimeout(() => {
                 image.remove();
-         }, 3000);
+        }, 3000);
     }
 };
 
