@@ -6,10 +6,22 @@ document.addEventListener('DOMContentLoaded', function() {
     backBtn.addEventListener('click', () => {
         window.location.href = '../host.html';
     });
+
+    // WebSocket接続を確立
+    const ws = new WebSocket('ws://' + window.location.hostname + ':3000');
     
     saveBtn.addEventListener('click', () => {
-        // ここでワークシートの内容を保存する処理を追加
-        alert('ワークシートが保存されました！');
+        const worksheetContent = worksheetText.value;
+        if (worksheetContent) {
+            const obj = {
+                type: 'worksheet',
+                content: worksheetContent
+            };
+            ws.send(JSON.stringify(obj));
+            alert('ワークシートの内容が送信されました！');
+        } else {
+            alert('ワークシートの内容が空です。');
+        }
     });
     
     // 保存されたワークシートの内容を読み込む（例としてローカルストレージを使用）
@@ -17,4 +29,19 @@ document.addEventListener('DOMContentLoaded', function() {
     if (savedWorksheet) {
         worksheetText.value = savedWorksheet;
     }
+
+    // ワークシートの内容をaudienceに送信
+    send.onclick = () => {
+        const message = messageInput.value;
+        if (message) {
+            const obj = {
+                type: 'worksheet', 
+                content: message
+            }
+            ws.send(JSON.stringify(obj)); // JSON形式で送信
+        messageInput.value = '';
+        }
+    };
+    
 });
+
