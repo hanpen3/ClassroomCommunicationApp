@@ -118,7 +118,7 @@ questionButton.onclick = () => {
     const message = messageInput.value;
     if (message) {
         const obj = {
-            type: 'question', 
+            type: 'question',
             name: username, 
             content: message
         }

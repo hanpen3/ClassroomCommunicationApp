@@ -11,6 +11,14 @@ document.addEventListener('DOMContentLoaded', function() {
     const hostname = window.location.hostname;
     const ws = new WebSocket(`ws://${hostname}:3000`);
 
+    /*自分が主催者であることをサーバに送信 */
+    ws.onopen = () => {
+        const obj = {
+            type: 'host'
+        }
+        ws.send(JSON.stringify(obj)); // JSON形式で送信
+    }
+   
     //◎主催者はユーザ名の入力、入退出のログ必要？？
 
     // var username = prompt("ユーザー名");
