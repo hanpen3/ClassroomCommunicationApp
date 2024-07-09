@@ -212,8 +212,30 @@ document.addEventListener('DOMContentLoaded', function() {
         }
         updateOptions();
         optionsSelect.addEventListener('change', updateOptions);
-
         mainSpace.scrollTop = mainSpace.scrollHeight;
+
+        startButton.onclick = () => {
+            const message = titleInput.value;
+            const 
+
+            const info={ //投票に関する情報
+
+            }
+
+            if (info) {
+                const obj = {
+                    type: 'vote', 
+                    name: 'server',
+                    content: message
+                }
+                ws.send(JSON.stringify(obj)); // JSON形式で送信
+                titleInput.value = '';
+                alert('投票が開催されました！');
+            }else {
+                alert('投票が開催できませんでした。');
+            }
+        };
+
         
         //window.location.href = './events/vote.html';
     });
