@@ -95,8 +95,47 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // ボタンのクリックイベント
     worksheetBtn.addEventListener('click', () => {
-        window.location.href = './events/worksheet.html';
+        mainSpace.innerHTML=''; //mainSpaceを空にする
+        const form=document.createElement('form');
+
+        const titleLabel=document.createElement('label');
+        titleLabel.textContent = 'お題を入力: ';
+        const titleInput = document.createElement('input');
+        titleInput.type = 'text';
+        titleInput.id = 'worksheetTitle';
+        form.appendChild(titleLabel);
+        form.appendChild(titleInput);
+        form.appendChild(document.createElement('br')); //改行
+
+        const startButton = document.createElement('button');
+        startButton.type = 'button';
+        startButton.textContent = 'ワークシートを実施';
+        startButton.id = 'startWorkSheetButton';
+        form.appendChild(startButton);
+
+        mainSpace.appendChild(form);
+        mainSpace.scrollTop = mainSpace.scrollHeight;
+        //window.location.href = './events/worksheet.html';
+
+        startButton.onclick = () => {
+            const message = titleInput.value;
+            if (message) {
+                const obj = {
+                    type: 'worksheet', 
+                    name: 'server',
+                    content: message
+                }
+                ws.send(JSON.stringify(obj)); // JSON形式で送信
+                titleInput.value = '';
+                alert('ワークシートの内容が送信されました！');
+            }else {
+                alert('ワークシートの内容が空です。');
+            }
+        };
+
     });
+
+    
     
     //投票ボタンが押された場合(汎用スペースに投票の設定を表示できるようにする)
     voteBtn.addEventListener('click', () => {
