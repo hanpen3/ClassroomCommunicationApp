@@ -85,11 +85,25 @@ ws.onmessage = (event) => {
             image.src="./images/clear_bikkuri.png";
         }else if(content==="heart"){
             image.src="./images/clear_heart.png";
-        }
-        image.width=30;
-        image.height=30;
-        chat.appendChild(image);
-        chat.scrollTop = chat.scrollHeight;
+       }
+       image.width=30;
+       image.height=30;
+       image.classList.add('reaction-animation');
+       chat.scrollTop = chat.scrollHeight;
+
+       const chatContainer = document.getElementById('chat-container');  // チャットコンテナ要素を取得
+       
+// ランダムな水平位置を設定
+const maxLeft = chatContainer.clientWidth - image.width;  // 最大の左位置
+const randomLeft = Math.floor(Math.random() * maxLeft);  // ランダムな左位置を計算
+image.style.left = `${randomLeft}px`;  // 画像の左位置を設定
+
+       chatContainer.appendChild(image);  // 画像要素をチャットコンテナに追加
+
+       // アニメーション終了後に要素を削除
+       setTimeout(() => {
+                image.remove();
+         }, 3000);
     }
 };
 
@@ -118,7 +132,7 @@ questionButton.onclick = () => {
     const message = messageInput.value;
     if (message) {
         const obj = {
-            type: 'question', 
+            type: 'question',
             name: username, 
             content: message
         }
@@ -132,4 +146,5 @@ messageInput.addEventListener('keypress', (event) => {
     commentButton.click();
     }
 });
+
 

@@ -218,3 +218,32 @@ body {
     max-width: 90%;
   }
 }
+
+
+/* リアクション画像のアニメーション用スタイル */
+.reaction-animation {
+  position: absolute;  /* 絶対位置指定で自由に配置 */
+  bottom: -50px;  /* 初期位置を画面下50px外に設定 */
+  width: 50px;  /* 画像の幅を50pxに設定 */
+  height: 50px;  /* 画像の高さを50pxに設定 */
+  opacity: 0;  /* 初期状態は完全に透明 */
+  animation: floatUp 3s ease-out forwards;  /* floatUpアニメーションを3秒間実行 */
+}
+
+/* アニメーションのキーフレーム定義 */
+@keyframes floatUp {
+  0% {
+    bottom: -50px;  /* 開始位置 */
+    opacity: 1;  /* 開始時は完全に不透明 */
+  }
+  70% {
+    bottom: 70%; /* 終了位置 */
+    opacity: 0;  /* 終了時は完全に透明 */
+  }
+}
+
+/* チャットコンテナに相対位置を設定 */
+#chat-container {
+  position: relative;
+  overflow: hidden;
+}
