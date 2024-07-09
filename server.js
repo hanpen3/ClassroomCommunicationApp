@@ -14,16 +14,10 @@ let clients = [];
 var oneTimePass;
 let host;
 
-// 30s毎に４桁の乱数を出力
 function setOnetimePass() {
     oneTimePass = Math.floor(1000 + Math.random() * 9000);
     console.log(`Generated one-time-password : ${oneTimePass}`);
 }
-
-setOnetimePass();
-setInterval(() => {
-    setOnetimePass();
-}, 30000);
 
 /* クライアント接続時の動作 */
 wss.on('connection', (ws) => {
@@ -32,24 +26,39 @@ wss.on('connection', (ws) => {
 
     ws.on('message', (message) => {
         const data=JSON.parse(message); //JSON形式で解析
-        const obj=JSON.parse(message.data); //JSON形式からオブジェクトに
-        const type = obj.type; //データのタイプ
-        const name = obj.name;
-        const content = obj.content; //データの内容
-        console.log(`Received: ${data}`);
-
         const type = data.type;
+        const name = data.name;
+        const content = data.content;
 
-        if(type==="host"){ /*ホストの登録*/
+        console.log(`MessageReceived type:${type}, name:${name}, "${content}"`);
+
+        switch(type) {
+        case 'host': /*ホストの登録*/
             host=ws;
             console.log("ホストが登録されました");
-        }else if(type==="vote"){ //ホストのみに送るものはここに書く(投票、ワークシート)
+            break;
+        case 'vote': //ホストのみに送るものはここに書く(投票、ワークシート)
             if (host.readyState === WebSocket.OPEN) {
                 host.send(JSON.stringify(data)); // JSON形式で送信
             }
             console.log("voteを送信しました");
-
-        }else{ //コメント・質問など全クライアントとホストに送るもの
+            break;
+        case 'passCheck':
+            const sobj = {
+                type: 'passSend',
+                name: 'server',
+                content: oneTimePass
+            }
+            wss.clients.forEach((client) => {
+                if (client.readyState === WebSocket.OPEN) {
+                    client.send(JSON.stringify(sobj)); // JSON形式で送信
+                }
+            });
+            break;
+        case 'passDemand':
+            setOnetimePass();
+            break;
+        default: //コメント・質問など全クライアントとホストに送るもの
             wss.clients.forEach((client) => {
                 if (client.readyState === WebSocket.OPEN) {
                     client.send(JSON.stringify(data)); // JSON形式で送信

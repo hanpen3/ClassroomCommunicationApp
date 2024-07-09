@@ -5,6 +5,11 @@ const audienceButton = document.getElementById('audience');
 audienceButton.style.height = (window.innerHeight * 0.2) + "px";
 audienceButton.style.width = (window.innerWidth * 0.2) + "px";
 
+const hostname = window.location.hostname;
+const ws = new WebSocket(`ws://${hostname}:3000`);
+
+var passInput
+
 /* 「オーディエンス」ボタンを押したときの処理 */
 audienceButton.onclick = () => {
     window.open("audience.html", null, "top=0,left=" + (screen.width - 500) + ",width=" + "500" + ",height=" + screen.availHeight);
@@ -12,22 +17,35 @@ audienceButton.onclick = () => {
 
 /* 「主催者」ボタンを押したときの処理 */
 hostButton.onclick = () => {
-    var passInput = prompt("ワンタイムパスワードを入力してください");
-    alert("input = " + passInput);
+    const demandObj = {
+        type: 'passDemand', 
+        name: 'index', 
+        content: 'demand'
+    }
+    ws.send(JSON.stringify(demandObj)); // JSON形式で送信
+    
+    passInput = prompt("ワンタイムパスワードを入力してください");
     
     const obj = {
         type: 'passCheck', 
-        name: username, 
-        content: message
+        name: 'index', 
+        content: passInput
     }
     ws.send(JSON.stringify(obj)); // JSON形式で送信
-
-    // if(false) {
-    //     window.open("host.html", null, "top=0,left=" + (screen.width - 500) + ",width=" + "500" + ",height=" + screen.availHeight);
-    // } else {
-    //     alert("パスワードが違います");
-    // }
 };
+
+ws.onmessage = (event) => {
+    const obj=JSON.parse(event.data); //JSON形式からオブジェクトに
+    const type = obj.type; //データのタイプ
+    const name = obj.name;
+    const content = obj.content; //データの内容
+
+    // alert("get message in index, INPUT=" + passInput + ", PASS=" + content);
+    // alert(Boolean(type==='passSend' && content == passInput));
+    if(type==='passSend' && content == passInput){
+        window.open("host.html", null, "top=0,left=" + (screen.width - 500) + ",width=" + "500" + ",height=" + screen.availHeight);
+    }
+}
 
 //？
 messageInput.addEventListener('keypress', (event) => {
