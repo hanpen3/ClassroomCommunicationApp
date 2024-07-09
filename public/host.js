@@ -8,6 +8,8 @@ document.addEventListener('DOMContentLoaded', function() {
     const hostname = window.location.hostname;
     const ws = new WebSocket(`ws://${hostname}:3000`);
 
+    var num_of_connection = 0;
+
     /*自分が主催者であることをサーバに送信 */
     ws.onopen = () => {
         const obj = {
@@ -63,9 +65,15 @@ document.addEventListener('DOMContentLoaded', function() {
             questions.appendChild(message);
             questions.scrollTop = questions.scrollHeight;
         }else if(type==="connection"){
-            /*同時接続数の更新*/
+            /*同時接続数の更新( + )*/
+            num_of_connection++;
             const connectionCount = document.getElementById('connection-count');
-            connectionCount.textContent = `接続: ${content - 1}人`; // 文字列として処理 : 主催者も含まれるので、-1 する
+            connectionCount.textContent = `接続: ${num_of_connection}人`; // 文字列として処理 : 主催者も含まれるので、-1 する
+        }else if(type==="disconnection"){
+            /*同時接続数の更新( - )*/
+            num_of_connection--;
+            const connectionCount = document.getElementById('connection-count');
+            connectionCount.textContent = `接続: ${num_of_connection}人`; // 文字列として処理 : 主催者も含まれるので、-1 する
         }else if(type==="reaction"){
             /*リアクションを表示する */
             const image = document.createElement('img');
