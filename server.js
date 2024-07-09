@@ -90,7 +90,6 @@ wss.on('connection', (ws) => {
     ws.on('close', () => {
         console.log('Client disconnected');
         num_of_connection--;
-        console.log(num_of_connection);
 
         updateConnectionCount(); // 同時接続数の更新
         
