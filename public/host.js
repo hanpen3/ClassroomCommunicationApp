@@ -83,7 +83,6 @@ document.addEventListener('DOMContentLoaded', function() {
             mainSpace.appendChild(image);
             mainSpace.scrollTop = mainSpace.scrollHeight;
         }
-       
     };
     
     /* ホストがサーバーによって切断される場合の処理 */
