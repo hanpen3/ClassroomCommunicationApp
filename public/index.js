@@ -17,6 +17,7 @@ audienceButton.onclick = () => {
 
 /* 「主催者」ボタンを押したときの処理 */
 hostButton.onclick = () => {
+    window.close();
     const demandObj = {
         type: 'passDemand', 
         name: 'index', 

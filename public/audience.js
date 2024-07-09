@@ -34,20 +34,30 @@ document.querySelectorAll('.reaction').forEach((element) => {
 
 ws.onopen = () => {
     const message = username + " さんが参加しました";
-    const obj = {
+    const obj_log = {
         type: 'log', 
         content: message
     }
-    ws.send(JSON.stringify(obj));
+    const obj_connection = {
+        type: 'connection', 
+        content: null
+    }
+    ws.send(JSON.stringify(obj_log));
+    ws.send(JSON.stringify(obj_connection));
 };
 
 window.onbeforeunload = () => {
     const message = username + " さんが退出しました";
-    const obj = {
+    const obj_log = {
         type: 'log',
         content: message
     }
-    ws.send(JSON.stringify(obj));
+    const obj_disconnection = {
+        type: 'disconnection',
+        content: null
+    }
+    ws.send(JSON.stringify(obj_log));
+    ws.send(JSON.stringify(obj_disconnection));
 };
 
 ws.onmessage = (event) => {
