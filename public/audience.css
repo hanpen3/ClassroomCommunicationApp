@@ -8,7 +8,7 @@
 /* ボディ全体のスタイル設定 */
 body {
   font-family: 'Noto Sans JP', sans-serif;
-  background-color: #bbcce3;
+  background-color: #ffffff;
   color: #333;
   height: 100vh;
   display: flex;
@@ -23,10 +23,10 @@ body {
   width: 100%;
   max-width: 440px;
   height: 70vh;
-  background-color: #b3cefb;
+  background-color: #e3edff;
   display: flex;
   flex-direction: column;
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
+  /* box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23); */
 }
 
 /* チャットヘッダーのスタイル設定 */
@@ -140,18 +140,18 @@ body {
 #input-container {
   display: flex;
   padding: 15px;
-  background-color: #f1f3f6;
-  border-top: 1px solid #dcdde1;
+  background-color: #ffffff;
+  border-top: 1px solid #ffffff;
 }
 
 /* メッセージ入力欄のスタイル設定 */
 #message {
   flex-grow: 1;
   padding: 12px 15px;
-  border: 1px solid #dcdde1;
+  border: 1px solid #ffffff;
   border-radius: 25px;
   font-size: 16px;
-  outline: none;
+  outline: 2px solid #007bff;
   transition: border-color 0.3s;
 }
 

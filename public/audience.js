@@ -85,9 +85,7 @@ ws.onmessage = (event) => {
     }else if(type==="worksheet"){
         const popup = window.open("./audience-events/worksheet.html", "_blank", "top=0,left=0,width=" + "500" + ",height=500");
         popup.onload = () => popup.postMessage(content, window.location.origin);
-    }else if(type==="reaction")
-        {
-       /*リアクションを動かすのができないです */
+    }else if(type==="reaction"){
         const image = document.createElement('img');
         if(content==="good"){
             image.src="./images/clear_good.png";
@@ -106,13 +104,12 @@ ws.onmessage = (event) => {
         chat.scrollTop = chat.scrollHeight;
 
         const chatContainer = document.getElementById('chat-container');  // チャットコンテナ要素を取得
-        
-// ランダムな水平位置を設定
-const maxLeft = chatContainer.clientWidth - image.width;  // 最大の左位置
-const randomLeft = Math.floor(Math.random() * maxLeft);  // ランダムな左位置を計算
-image.style.left = `${randomLeft}px`;  // 画像の左位置を設定
+        // ランダムな水平位置を設定
+        const maxLeft = chatContainer.clientWidth - image.width;  // 最大の左位置
+        const randomLeft = Math.floor(Math.random() * maxLeft);  // ランダムな左位置を計算
+        image.style.left = `${randomLeft}px`;  // 画像の左位置を設定
 
-       chatContainer.appendChild(image);  // 画像要素をチャットコンテナに追加
+        chatContainer.appendChild(image);  // 画像要素をチャットコンテナに追加
 
        // アニメーション終了後に要素を削除
         setTimeout(() => {
@@ -120,6 +117,15 @@ image.style.left = `${randomLeft}px`;  // 画像の左位置を設定
         }, 3000);
     }
 };
+
+/* ワークシートの内容を受け取った時の処理 */
+window.addEventListener('message', (event) => {
+    if (event.origin === window.location.origin) { // オリジンを確認
+        const obj= event.data;
+        obj.name = username;
+        ws.send(JSON.stringify(obj));
+    }
+});
 
 /* クライアントがサーバーによって切断される場合の処理 */
 ws.onclose = (event) => {

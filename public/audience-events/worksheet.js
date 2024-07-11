@@ -1,20 +1,27 @@
+const sendButton = document.getElementById('send');
+const Input = document.getElementById('textbox');
+
 window.addEventListener('message', (event) => {
-    if (event.origin === window.location.origin && event.data.id) {
+    if (event.origin === window.location.origin) {
         document.getElementById("title").textContent = event.data;
     }
 });
 
-worksheetBtn.addEventListener('click', () => {
-    const message = messageInput.value;
+sendButton.addEventListener('click', () => {
+    const message = Input.value;
     if (message) {
         const obj = {
             type: 'worksheetSend', 
-            name: username, 
+            name: "popUp", 
             content: message
+        };
+        Input.value = '';
+
+        // 元のウィンドウにメッセージを送信
+        if (window.opener) { // 元のウィンドウが存在するか確認
+            window.opener.postMessage(obj, window.location.origin); 
         }
-        ws.send(JSON.stringify(obj)); // JSON形式で送信
-    messageInput.value = '';
+
+        window.close();
     }
-    const textContent = document.getElementById("textbox").value;
-    window.close(); 
 });

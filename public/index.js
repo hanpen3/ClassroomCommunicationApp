@@ -42,10 +42,8 @@ ws.onmessage = (event) => {
     const type = obj.type; //データのタイプ
     const name = obj.name;
     const content = obj.content; //データの内容
-
-    // alert("get message in index, INPUT=" + passInput + ", PASS=" + content);
-    // alert(Boolean(type==='passSend' && content == passInput));
-    if(type==='passSend' && content == passInput){
+    
+    if((type==='passSend' && content == passInput)){
         window.open("host.html", null, "top=0,left=" + (screen.width - 500) + ",width=" + "500" + ",height=" + screen.availHeight);
     }
 }

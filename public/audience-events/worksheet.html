@@ -1,21 +1,16 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>テキスト送信</title>
-<style>
-    #textbox {
-    width: 300px;
-    height: 150px;
-    padding: 10px;
-    font-size: 16px;
-}
-</style>
+  <title>テキスト送信</title>
+  <link rel="stylesheet" href="worksheet.css">
 </head>
 <body>
-    <label id="title">aaa</label> 
-    <textarea id="textbox"></textarea>
-    <button id="send">送信</button>
+  <div class="container">
+    <label for="textbox" class="title", id="title">ワークシート</label>
+    <textarea id="textbox" name="textbox"></textarea>
+    <button id="send" type="button">送信</button>
+  </div>
 
-    <script src="worksheet.js"></script>
+  <script src="worksheet.js"></script>
 </body>
 </html>

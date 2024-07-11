@@ -45,9 +45,9 @@ wss.on('connection', (ws) => {
             console.log("voteを送信しました");
             break;
         case 'worksheet': //ワークシートの内容を受信
-        console.log('Received worksheet content: ' + data.content);
-        // ワークシートの内容を全クライアントに送信
-        wss.clients.forEach((client) => {
+            console.log('Received worksheet content: ' + data.content);
+            // ワークシートの内容を全クライアントに送信
+            wss.clients.forEach((client) => {
             if (client.readyState === WebSocket.OPEN) {
                 client.send(JSON.stringify({
                     type: 'worksheet',
