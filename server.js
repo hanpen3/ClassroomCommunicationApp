@@ -38,12 +38,26 @@ wss.on('connection', (ws) => {
             host=ws;
             console.log("ホストが登録されました");
             break;
-        case 'vote': //ホストのみに送るものはここに書く(投票、ワークシート)
-            if (host.readyState === WebSocket.OPEN) {
-                host.send(JSON.stringify(data)); // JSON形式で送信
-            }
-            console.log("voteを送信しました");
-            break;
+        
+        case 'vote': //主催者から投票の開催を受信
+            //投票の開催を全クライアントに送信
+            wss.clients.forEach((client) => {
+                if (client.readyState === WebSocket.OPEN) {
+                    client.send(JSON.stringify({
+                        type: 'vote',
+                        name: 'server',
+                        content: content
+                    }));
+                }
+            });
+
+        // case 'vote': //ホストのみに送るものはここに書く(投票、ワークシート)
+        //     if (host.readyState === WebSocket.OPEN) {
+        //         host.send(JSON.stringify(data)); // JSON形式で送信
+        //     }
+        //     console.log("voteを送信しました");
+        //     break;
+        break;
         case 'worksheet': //ワークシートの内容を受信
             console.log('Received worksheet content: ' + data.content);
             // ワークシートの内容を全クライアントに送信

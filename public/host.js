@@ -4,6 +4,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const endEventBtn = document.getElementById('end-event-btn');
     const chatMessages = document.getElementById('chat-messages');
     const questions = document.getElementById('questions');
+    const mainSpace = document.getElementById('mainSpace');
 
     const hostname = window.location.hostname;
     const ws = new WebSocket(`ws://${hostname}:3000`);
@@ -246,17 +247,17 @@ document.addEventListener('DOMContentLoaded', function() {
         form.appendChild(graphSelect);
         form.appendChild(document.createElement('br'));
         
-        const startButton = document.createElement('button');
-        startButton.type = 'button';
-        startButton.textContent = '投票を開催';
-        startButton.id = 'startVoteButton';
-        form.appendChild(startButton);
+        const startVoteButton = document.createElement('button');
+        startVoteButton.type = 'button';
+        startVoteButton.textContent = '投票を開催';
+        startVoteButton.id = 'startVoteButton';
+        form.appendChild(startVoteButton);
 
-        const quitButton = document.createElement('button');
-        quitButton.type = 'button';
-        quitButton.textContent = 'やめる';
-        quitButton.id = 'quitVoteButton';
-        form.appendChild(quitButton);
+        const quitVoteButton = document.createElement('button');
+        quitVoteButton.type = 'button';
+        quitVoteButton.textContent = 'やめる';
+        quitVoteButton.id = 'quitVoteButton';
+        form.appendChild(quitVoteButton);
 
         mainSpace.appendChild(form);
 
@@ -281,7 +282,7 @@ document.addEventListener('DOMContentLoaded', function() {
         mainSpace.scrollTop = mainSpace.scrollHeight;
 
         /*投票についての情報をサーバに送信*/
-        startButton.onclick = () => {
+        startVoteButton.onclick = () => {
             const voteTitle = titleInput.value; //投票のタイトル
             const optionInputs = document.querySelectorAll('.optionInput');
             const options = Array.from(optionInputs).map(input => input.value); //選択肢の配列を作成
@@ -348,7 +349,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
                         if(remainTime <= 0){
                             clearInterval(countdownInterval);
-                            count.textContent = '時間切れ' //test
+                            count.textContent = '時間切れ' //◎本当は投票終了のお知らせをする
                         }
                   }, 1000);
                 };
@@ -364,12 +365,11 @@ document.addEventListener('DOMContentLoaded', function() {
            
         };
 
-        quitButton.onclick = () => {
+        quitVoteButton.onclick = () => {
             mainSpace.innerHTML=''; //汎用スペースをクリア
             alert('投票の作成をやめました！');
         };
         
-        //window.location.href = './events/vote.html';
     });
 
     
