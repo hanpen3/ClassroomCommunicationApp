@@ -354,8 +354,7 @@ document.addEventListener('DOMContentLoaded', function() {
                   }, 1000);
                 };
 
-                secondsCountdown(); //カウントダウンを開始
-
+                secondsCountdown(); //カウントダウンを開始            
 
             }else {
                 alert('投票が開催できませんでした。');
