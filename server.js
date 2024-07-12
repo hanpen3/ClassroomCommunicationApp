@@ -19,6 +19,9 @@ function setOnetimePass() {
     console.log(`Generated one-time-password : ${oneTimePass}`);
 }
 
+var counter; //投票数
+let countStartFlag=false;
+
 /* クライアント接続時の動作 */
 wss.on('connection', (ws) => {
     console.log('Client connected');
@@ -40,17 +43,48 @@ wss.on('connection', (ws) => {
             break;
         
         case 'vote': //主催者から投票の開催を受信
-        console.log(`voteContent: title:${content.title}, number:${content.number}, options:${content.options}, multi:${content.multi}, time:${content.time}, graph:${content.graph}`);
-            //投票の開催を全クライアントに送信
+            console.log(`voteContent: title:${content.title}, number:${content.number}, options:${content.options}, multi:${content.multi}, time:${content.time}, graph:${content.graph}`);
+                //投票の開催を全クライアントに送信
+                wss.clients.forEach((client) => {
+                    if (client.readyState === WebSocket.OPEN) {
+                        client.send(JSON.stringify({
+                            type: 'vote',
+                            name: 'server',
+                            content: content
+                        }));
+                    }
+                });
+            break;
+        case 'voteAnswer': //オーディエンスから投票の回答を受信して集計
+            console.log(`voteAnswerContent: title:${content.title}, number:${content.number}, options:${content.options}, multi:${content.multi}, graph:${content.graph}, ans:${content.ans}`);
+            if(!countStartFlag){
+                counter = new Array(content.number);
+                counter.fill(0);
+                countStartFlag=true;
+            }
+            const answer = content.ans;
+            if(content.multi){
+                for(let i =0; i < content.ans.length; i++){
+                    counter[answer[i]]++;
+                }
+            }else{
+                counter[answer]++;
+            }
+            break;
+        case 'voteResult' : //主催者から投票の集計結果の要求を受信
+            console.log('voteResult');
+            //投票結果を全クライアントに送信
+            content.result = counter;
             wss.clients.forEach((client) => {
                 if (client.readyState === WebSocket.OPEN) {
                     client.send(JSON.stringify({
-                        type: 'vote',
+                        type: 'voteResult',
                         name: 'server',
                         content: content
                     }));
                 }
             });
+            break;
 
         // case 'vote': //ホストのみに送るものはここに書く(投票、ワークシート)
         //     if (host.readyState === WebSocket.OPEN) {
@@ -58,7 +92,6 @@ wss.on('connection', (ws) => {
         //     }
         //     console.log("voteを送信しました");
         //     break;
-        break;
         case 'worksheet': //ワークシートの内容を受信
             console.log('Received worksheet content: ' + data.content);
             // ワークシートの内容を全クライアントに送信

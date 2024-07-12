@@ -106,6 +106,8 @@ document.addEventListener('DOMContentLoaded', function() {
             setTimeout(() => {
                 image.remove();
             }, 3000);
+        }else if(type==="voteResult"){
+            /*グラフの作成(汎用スペースに表示) ＋ コメントに投票結果を流す ＋ 投票結果をテキストファイルとして得る(?)*/
         }
     };
     
@@ -312,7 +314,7 @@ document.addEventListener('DOMContentLoaded', function() {
             if (info) {
                 const obj = {
                     type: 'vote', 
-                    name: 'server',
+                    name: 'host',
                     content: info
                 }
                 ws.send(JSON.stringify(obj)); // JSON形式で送信
@@ -349,7 +351,13 @@ document.addEventListener('DOMContentLoaded', function() {
 
                         if(remainTime <= 0){
                             clearInterval(countdownInterval);
-                            count.textContent = '時間切れ' //◎本当は投票終了のお知らせをする
+                            count.textContent = '0';
+                            const obj2 = {
+                                type: 'voteResult', 
+                                name: 'host',
+                                content: info
+                            }
+                            ws.send(JSON.stringify(obj2)); // JSON形式で送信
                         }
                   }, 1000);
                 };

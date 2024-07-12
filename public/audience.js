@@ -88,6 +88,9 @@ ws.onmessage = (event) => {
     }else if(type==="vote"){
         const popup = window.open("./audience-events/voteAnswer.html", "_blank", "top=0,left=0,width=" + "500" + ",height=500");
         popup.onload = () => popup.postMessage(content, window.location.origin);
+    }else if(type==="voteResult"){
+        /*投票結果のグラフのポップアップ */
+
     }else if(type==="reaction"){
         const image = document.createElement('img');
         if(content==="good"){

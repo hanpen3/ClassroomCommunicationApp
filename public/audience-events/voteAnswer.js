@@ -90,7 +90,7 @@ window.addEventListener('message', (event) => {
 
                 if(remainTime <= 0){
                     clearInterval(countdownInterval);
-                    count.textContent = '0'
+                    window.close();
                 }
           }, 1000);
         };
