@@ -18,7 +18,7 @@ document.addEventListener('DOMContentLoaded', function() {
         ws.send(JSON.stringify(obj)); // JSON形式で送信
     }
     
-    //◎主催者はユーザ名の入力、入退出のログ必要？？
+    //◎主催者はユーザ名の入力、入退出のログ必要ない？？
 
     // var username = prompt("ユーザー名");
 
@@ -205,7 +205,7 @@ document.addEventListener('DOMContentLoaded', function() {
         form.appendChild(document.createElement('br'));
 
         const multipleLabel = document.createElement('label');
-        multipleLabel.textContent = '複数選択可: ';
+        multipleLabel.textContent = '複数選択(可ならチェック): ';
         const multipleCheckbox = document.createElement('input');
         multipleCheckbox.type = 'checkbox';
         multipleCheckbox.id = 'multipleSelection';
@@ -221,13 +221,31 @@ document.addEventListener('DOMContentLoaded', function() {
         timeLimits.forEach(time => {
             const option = document.createElement('option');
             option.value = time;
-            option.textContent = `${time}秒`;
+            option.textContent = `${time}`;
             timeLimitSelect.appendChild(option);
         });
+        const timeUnitLabel = document.createElement('label');
+        timeUnitLabel.textContent = '秒';
         form.appendChild(timeLimitLabel);
         form.appendChild(timeLimitSelect);
+        form.appendChild(timeUnitLabel);
         form.appendChild(document.createElement('br'));
 
+        const graphLabel = document.createElement('label');
+        graphLabel.textContent = '投票結果の表示方法: ';
+        const graphSelect = document.createElement('select');
+        graphSelect.id = 'graph';
+        const graphs = ['円グラフ', '棒グラフ'];
+        graphs.forEach(graph => {
+            const option = document.createElement('option');
+            option.value = graph;
+            option.textContent = graph;
+            graphSelect.appendChild(option);
+        });
+        form.appendChild(graphLabel);
+        form.appendChild(graphSelect);
+        form.appendChild(document.createElement('br'));
+        
         const startButton = document.createElement('button');
         startButton.type = 'button';
         startButton.textContent = '投票を開催';
@@ -265,9 +283,6 @@ document.addEventListener('DOMContentLoaded', function() {
         /*投票についての情報をサーバに送信*/
         startButton.onclick = () => {
             const voteTitle = titleInput.value; //投票のタイトル
-            const optionsNumber = optionsSelect.value; //択数
-            const multipleSelection = multipleCheckbox.checked; //複数選択か否か(チェックされていたらtrue)
-            const timeLimit = timeLimitSelect.value; //制限時間
             const optionInputs = document.querySelectorAll('.optionInput');
             const options = Array.from(optionInputs).map(input => input.value); //選択肢の配列を作成
 
@@ -289,7 +304,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 number: optionsSelect.value,
                 options: options,
                 multi: multipleCheckbox.checked,
-                time: timeLimitSelect.value
+                time: timeLimitSelect.value, 
+                graph: graphSelect.value
             }
 
             if (info) {
@@ -300,12 +316,52 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
                 ws.send(JSON.stringify(obj)); // JSON形式で送信
                 titleInput.value = '';
-                alert('投票が開催されました！');
+                //alert('投票が開催されました！');
+                mainSpace.innerHTML='';
+
+                /*投票終了までのカウントダウンを表示*/
+                const countDownLabel1 = document.createElement('span');
+                countDownLabel1.textContent = `投票終了まで残り `;
+                mainSpace.appendChild(countDownLabel1);
+                const count = document.createElement('span');
+                mainSpace.appendChild(count);
+                const countDownLabel2 = document.createElement('span');
+                countDownLabel2.textContent = ` 秒`;
+                mainSpace.appendChild(countDownLabel2);
+
+                let countdownInterval;
+                const secondsCountdown = () => { //秒をカウントダウンする
+                    
+                  if(countdownInterval){ //前回のカウントダウンが残っている場合
+                        clearInterval(countdownInterval);
+                  }  
+
+                  const timeLimit = info.time;
+                  let remainTime = timeLimit;
+
+                  count.textContent = `${remainTime}`;
+
+                  //カウントダウンのセットアップ
+                  countdownInterval = setInterval(()=>{
+                        remainTime--;
+                        count.textContent = `${remainTime} `;
+
+                        if(remainTime <= 0){
+                            clearInterval(countdownInterval);
+                            count.textContent = '時間切れ' //test
+                        }
+                  }, 1000);
+                };
+
+                secondsCountdown(); //カウントダウンを開始
+
+
             }else {
                 alert('投票が開催できませんでした。');
+                mainSpace.innerHTML='';
             }
 
-            mainSpace.innerHTML=''; //汎用スペースをクリア
+           
         };
 
         quitButton.onclick = () => {

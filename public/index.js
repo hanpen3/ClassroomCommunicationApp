@@ -44,11 +44,10 @@ ws.onmessage = (event) => {
     const content = obj.content; //データの内容
     
     if((type==='passSend' && content == passInput)){
-        window.open("host.html", null, "top=0,left=" + (screen.width - 500) + ",width=" + "500" + ",height=" + screen.availHeight);
+        window.open("host.html", null, "top=0,left=0, width=" + screen.availWidth + ",height=" + screen.availHeight);
     }
 }
 
-//？
 messageInput.addEventListener('keypress', (event) => {
     if (event.key === 'Enter') {
         sendButton.click();
