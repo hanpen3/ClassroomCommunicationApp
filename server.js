@@ -43,6 +43,7 @@ wss.on('connection', (ws) => {
             break;
         
         case 'vote': //主催者から投票の開催を受信
+            countStartFlag=false;
             console.log(`voteContent: title:${content.title}, number:${content.number}, options:${content.options}, multi:${content.multi}, time:${content.time}, graph:${content.graph}`);
                 //投票の開催を全クライアントに送信
                 wss.clients.forEach((client) => {
