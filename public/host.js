@@ -282,6 +282,8 @@ document.addEventListener('DOMContentLoaded', function() {
                     URL.revokeObjectURL(url);
                 }
             });
+        }else if(type==="worksheetSend"){
+            alert("ワークシートの回答を収集しました");
         }
     };
     
@@ -293,7 +295,7 @@ document.addEventListener('DOMContentLoaded', function() {
         chatMessages.scrollTop = chatMessages.scrollHeight;
     };
 
-    // ボタンのクリックイベント
+    // ワークシートボタンのクリックイベント
     worksheetBtn.addEventListener('click', () => {
         mainSpace.innerHTML=''; //mainSpaceを空にする
         const form=document.createElement('form');
@@ -303,8 +305,27 @@ document.addEventListener('DOMContentLoaded', function() {
         const titleInput = document.createElement('input');
         titleInput.type = 'text';
         titleInput.id = 'worksheetTitle';
+        
         form.appendChild(titleLabel);
         form.appendChild(titleInput);
+        form.appendChild(document.createElement('br'));
+
+        const timeLimit=document.createElement('limit');
+        timeLimit.textContent = '制限時間: ';
+        const timeLimitSelect = document.createElement('select');
+        timeLimitSelect.id = 'timeLimit';
+        const timeLimits = [1, 2, 3, 4, 5];
+        timeLimits.forEach(time => {
+            const option = document.createElement('option');
+            option.value = time;
+            option.textContent = `${time}`;
+            timeLimitSelect.appendChild(option);
+        });
+        const timeUnitLabel = document.createElement('label');
+        timeUnitLabel.textContent = '分';
+        form.appendChild(timeLimit);
+        form.appendChild(timeLimitSelect);
+        form.appendChild(timeUnitLabel);
         form.appendChild(document.createElement('br'));
 
         const startButton = document.createElement('button');
@@ -324,12 +345,15 @@ document.addEventListener('DOMContentLoaded', function() {
         //window.location.href = './events/worksheet.html';
 
         startButton.onclick = () => {
-            const message = titleInput.value;
-            if (message) {
+            const info = {
+                title: titleInput.value, //お題
+                time: timeLimitSelect.value //制限時間
+            }
+            if (info.title) {
                 const obj = {
                     type: 'worksheet', 
                     name: 'server',
-                    content: message //お題
+                    content: info
                 }
                 ws.send(JSON.stringify(obj)); // JSON形式で送信
                 mainSpace.innerHTML=''; //汎用スペースをクリア
@@ -542,8 +566,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 alert('投票が開催できませんでした。');
                 mainSpace.innerHTML='';
             }
-
-           
         };
 
         quitVoteButton.onclick = () => {

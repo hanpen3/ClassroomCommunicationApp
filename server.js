@@ -94,18 +94,24 @@ wss.on('connection', (ws) => {
         //     console.log("voteを送信しました");
         //     break;
         case 'worksheet': //ワークシートの内容を受信
-            console.log('Received worksheet content: ' + data.content);
+        console.log(`voteContent: title:${content.title}, time:${content.time}`);
             // ワークシートの内容を全クライアントに送信
             wss.clients.forEach((client) => {
             if (client.readyState === WebSocket.OPEN) {
                 client.send(JSON.stringify({
                     type: 'worksheet',
                     name: 'server',
-                    content: data.content
+                    content: content
                 }));
             }
-        });
-        break;
+            });
+            break;
+        case 'worksheetSend': //ワークシートの回答を受信
+            // ワークシートの内容を主催者に送信
+            if (host.readyState === WebSocket.OPEN) {
+                host.send(JSON.stringify(data)); // JSON形式で送信
+            }
+            break;
         case 'passCheck':
             sobj = {
                 type: 'passSend',

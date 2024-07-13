@@ -74,17 +74,17 @@ window.addEventListener('message', (event) => {
         let countdownInterval;
         const secondsCountdown = () => { //秒をカウントダウンする
             
-          if(countdownInterval){ //前回のカウントダウンが残っている場合
+            if(countdownInterval){ //前回のカウントダウンが残っている場合
                 clearInterval(countdownInterval);
-          }  
+            }  
 
-          const timeLimit = time;
-          let remainTime = timeLimit;
+            const timeLimit = time;
+            let remainTime = timeLimit;
 
-          count.textContent = `${remainTime}`;
+            count.textContent = `${remainTime}`;
 
-          //カウントダウンのセットアップ
-          countdownInterval = setInterval(()=>{
+            //カウントダウンのセットアップ
+            countdownInterval = setInterval(()=>{
                 remainTime--;
                 count.textContent = `${remainTime} `;
 
@@ -92,7 +92,7 @@ window.addEventListener('message', (event) => {
                     clearInterval(countdownInterval);
                     window.close();
                 }
-          }, 1000);
+            }, 1000);
         };
 
         secondsCountdown(); //カウントダウンを開始
