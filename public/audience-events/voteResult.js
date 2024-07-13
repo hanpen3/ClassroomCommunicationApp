@@ -12,9 +12,9 @@ window.addEventListener('message', (event) => {
         const multi = info.multi;
         const graph = info.graph;
         const result = info.result;
-        //innerHTMLを消す
+        myChart.innerHTML="";
 
-        /*必要な要素を画面に表示(とりあえず円グラフで) */
+        /*グラフ作成*/
         const backgroundColors = [
             'rgba(255, 99, 132, 0.2)',
             'rgba(255, 205, 86, 0.2)',
@@ -54,36 +54,74 @@ window.addEventListener('message', (event) => {
                 borderWidth: 1
             }]
         };
-        const chartOptions = {
-            responsive: true, 
-            plugins:{
-                legend: {
-                    position: 'top',
-                },
-                datalabels: {
-                    formatter: (value, ctx) => {
-                        if (value === 0) {
-                            return ''; // 0人のラベルは表示しない
+        switch(graph){
+            case "円グラフ":
+                const piechartOptions = {
+                    responsive: true, 
+                    plugins:{
+                        legend: {
+                            position: 'top',
+                        },
+                        datalabels: {
+                            formatter: (value, ctx) => {
+                                if (value === 0) {
+                                    return ''; // 0人のラベルは表示しない
+                                }
+                                const dataset = ctx.chart.data.datasets[0];
+                                const total = dataset.data.reduce((a, b) => a + b, 0);
+                                const percentage = ((value / total) * 100).toFixed(2); //小数点以下二桁
+                                return `${value}人\n(${percentage}%)`;
+                            },
+                            color: '#000',
+                            font: {
+                                weight: 'bold'
+                            }
                         }
-                        const dataset = ctx.chart.data.datasets[0];
-                        const total = dataset.data.reduce((a, b) => a + b, 0);
-                        const percentage = ((value / total) * 100).toFixed(2);
-                        return `${value}人\n(${percentage}%)`;
-                    },
-                    color: '#000',
-                    font: {
-                        weight: 'bold'
                     }
                 }
-            }
+                const mypieChart = new Chart(ctx, {
+                    type: 'pie', 
+                    data: chartData, 
+                    options: piechartOptions, 
+                    plugins: [ChartDataLabels]
+                });       
+                break;
+            case "棒グラフ":
+                const barchartOptions = {
+                    responsive: true, 
+                    plugins:{
+                        legend: {
+                            display: false,
+                        },
+                        datalabels: {
+                            anchor: 'end',
+                            align: 'start',
+                            formatter: (value) => {
+                                return `${value}人`;
+                            },
+                            color: '#000',
+                            font: {
+                                weight: 'bold'
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                stepSize: 10
+                            }
+                        }
+                    }
+                };
+                const mybarChart = new Chart(ctx, {
+                    type: 'bar', 
+                    data: chartData, 
+                    options: barchartOptions, 
+                    plugins: [ChartDataLabels]
+                });       
+                break;
         }
-        const mymyChart = new Chart(ctx, {
-            type: 'pie', 
-            data: chartData, 
-            options: chartOptions, 
-            plugins: [ChartDataLabels]
-        });       
-
     }
 });
 
