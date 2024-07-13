@@ -10,7 +10,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const hostname = window.location.hostname;
     const ws = new WebSocket(`ws://${hostname}:3000`);
     
-    const worksheet_ans = [];
+    const worksheet_ans = []; // 回答保存用配列
 
     var num_of_connection = 0;
 
@@ -286,8 +286,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
             });
         }else if(type==="worksheetSend"){
-            alert("ワークシートの回答を収集しました");
-            worksheet_ans.push(name + ": " + content);
+            worksheet_ans.push(name + ": " + content + "\n");
         }
     };
     
