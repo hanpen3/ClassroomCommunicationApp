@@ -1,5 +1,5 @@
 const voteTitle = document.getElementById('voteTitle');
-const pieChart = document.getElementById('pieChart');
+const myChart = document.getElementById('myChart');
 const closeButton = document.getElementById('close');
 
 
@@ -44,7 +44,7 @@ window.addEventListener('message', (event) => {
         }else{
             voteTitle.textContent = "投票のお題: "+title + "（単一選択）";  
         }
-        const ctx = pieChart.getContext('2d');
+        const ctx = myChart.getContext('2d');
         const chartData ={
             labels: options, 
             datasets:[{
@@ -77,7 +77,7 @@ window.addEventListener('message', (event) => {
                 }
             }
         }
-        const myPieChart = new Chart(ctx, {
+        const mymyChart = new Chart(ctx, {
             type: 'pie', 
             data: chartData, 
             options: chartOptions, 
