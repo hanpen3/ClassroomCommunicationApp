@@ -220,7 +220,7 @@ document.addEventListener('DOMContentLoaded', function() {
         timeLimitLabel.textContent = '制限時間: ';
         const timeLimitSelect = document.createElement('select');
         timeLimitSelect.id = 'timeLimit';
-        const timeLimits = [30, 60, 90, 120];
+        const timeLimits = [10, 30, 60, 90, 120];
         timeLimits.forEach(time => {
             const option = document.createElement('option');
             option.value = time;

@@ -19,7 +19,7 @@ function setOnetimePass() {
     console.log(`Generated one-time-password : ${oneTimePass}`);
 }
 
-var counter; //投票数
+var counter=[]; //投票数
 let countStartFlag=false;
 
 /* クライアント接続時の動作 */
@@ -59,11 +59,11 @@ wss.on('connection', (ws) => {
         case 'voteAnswer': //オーディエンスから投票の回答を受信して集計
             console.log(`voteAnswerContent: title:${content.title}, number:${content.number}, options:${content.options}, multi:${content.multi}, graph:${content.graph}, ans:${content.ans}`);
             if(!countStartFlag){
-                counter = new Array(content.number);
+                counter = new Array(parseInt(content.number));
                 counter.fill(0);
                 countStartFlag=true;
             }
-            const answer = content.ans;
+            var answer = content.ans;
             if(content.multi){
                 for(let i =0; i < content.ans.length; i++){
                     counter[answer[i]]++;
@@ -73,7 +73,7 @@ wss.on('connection', (ws) => {
             }
             break;
         case 'voteResult' : //主催者から投票の集計結果の要求を受信
-            console.log('voteResult');
+            console.log(`voteResult: counter:${counter}`);
             //投票結果を全クライアントに送信
             content.result = counter;
             wss.clients.forEach((client) => {

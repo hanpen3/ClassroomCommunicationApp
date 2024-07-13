@@ -1,0 +1,14 @@
+.container {
+    width: 80%;
+    margin: auto;
+    text-align: center;
+}
+.chart-container {
+    position: relative;
+    margin: auto;
+    height: 50vh;
+    width: 50vw;
+}
+#voteTitle{
+    font-size: medium;
+}
