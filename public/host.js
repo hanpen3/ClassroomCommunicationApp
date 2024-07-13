@@ -107,7 +107,181 @@ document.addEventListener('DOMContentLoaded', function() {
                 image.remove();
             }, 3000);
         }else if(type==="voteResult"){
-            /*グラフの作成(汎用スペースに表示) ＋ コメントに投票結果を流す ＋ 投票結果をテキストファイルとして得る(?)*/
+            /*グラフの作成 */
+            const title = content.title;
+            const number = content.number;
+            const options = content.options;
+            const multi = content.multi;
+            const graph = content.graph;
+            const result = content.result;
+            mainSpace.innerHTML="";
+
+            const voteTitle = document.createElement('h1');
+            voteTitle.id="voteTitle";
+            mainSpace.appendChild(voteTitle);
+            const myChart = document.createElement('canvas');
+            myChart.id="myChart";
+            mainSpace.appendChild(myChart);
+            const closeButton = document.createElement('button');
+            closeButton.id="close";
+            closeButton.type="button";
+            closeButton.textContent="投票結果を閉じる"
+            mainSpace.appendChild(closeButton);
+            myChart.style.margin="auto";
+            myChart.style.width='350px'; //意味がない？
+            myChart.style.height='350px';
+    
+            const backgroundColors = [
+                'rgba(255, 99, 132, 0.2)',
+                'rgba(255, 205, 86, 0.2)',
+                'rgba(75, 192, 192, 0.2)',
+                'rgba(153, 102, 255, 0.2)',
+                'rgba(54, 162, 235, 0.2)',
+                'rgba(255, 159, 64, 0.2)',
+                'rgba(201, 203, 207, 0.2)',
+                'rgba(100, 181, 246, 0.2)' 
+            ];
+            const borderColors = [
+                'rgba(255, 99, 132, 1)',
+                'rgba(255, 205, 86, 1)',
+                'rgba(75, 192, 192, 1)',
+                'rgba(153, 102, 255, 1)',
+                'rgba(54, 162, 235, 1)',
+                'rgba(255, 159, 64, 1)',
+                'rgba(201, 203, 207, 1)',
+                'rgba(100, 181, 246, 1)'
+            ];
+    
+            const selectBackgroundColor = backgroundColors.slice(0, number);
+            const selectBorderColor = borderColors.slice(0, number);
+            
+            if(multi){
+                voteTitle.textContent = "投票のお題: "+title +"（複数選択可）";  
+            }else{
+                voteTitle.textContent = "投票のお題: "+title + "（単一選択）";  
+            }
+            const ctx = myChart.getContext('2d');
+            const chartData ={
+                labels: options, 
+                datasets:[{
+                    data: result, 
+                    backgroundColor: selectBackgroundColor,  
+                    borderColor: selectBorderColor,
+                    borderWidth: 1
+                }]
+            };
+
+            switch(graph){
+                case "円グラフ":
+                    const piechartOptions = {
+                        responsive: true, 
+                        plugins:{
+                            legend: {
+                                position: 'top',
+                            },
+                            datalabels: {
+                                formatter: (value, ctx) => {
+                                    if (value === 0) {
+                                        return ''; // 0人のラベルは表示しない
+                                    }
+                                    const dataset = ctx.chart.data.datasets[0];
+                                    const total = dataset.data.reduce((a, b) => a + b, 0);
+                                    const percentage = ((value / total) * 100).toFixed(2); //小数点以下二桁
+                                    return `${value}人\n(${percentage}%)`;
+                                },
+                                color: '#000',
+                                font: {
+                                    weight: 'bold'
+                                }
+                            }
+                        }
+                    }
+                    const mypieChart = new Chart(ctx, {
+                        type: 'pie', 
+                        data: chartData, 
+                        options: piechartOptions, 
+                        plugins: [ChartDataLabels]
+                    });       
+                    break;
+                case "棒グラフ":
+                    const barchartOptions = {
+                        responsive: true, 
+                        plugins:{
+                            legend: {
+                                display: false,
+                            },
+                            datalabels: {
+                                anchor: 'end',
+                                align: 'start',
+                                formatter: (value) => {
+                                    if(value === 0){
+                                        return ``;
+                                    }
+                                    return `${value}人`;
+                                },
+                                color: '#000',
+                                font: {
+                                    weight: 'bold'
+                                }
+                            }
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                ticks: {
+                                    stepSize: 10
+                                }
+                            }
+                        }
+                    };
+                    const mybarChart = new Chart(ctx, {
+                        type: 'bar', 
+                        data: chartData, 
+                        options: barchartOptions, 
+                        plugins: [ChartDataLabels]
+                    });       
+                    break;
+            }
+           
+            /*コメントに投票結果を流す */
+            let total = result.reduce(function(sum, elem){
+                            return sum + elem;
+                        }, 0);
+            var vresult;
+            if(multi){
+                vresult = `【投票結果】 お題: ${title}（複数選択可）`
+            }else{
+                vresult = `【投票結果】 お題: ${title}（単一選択）`
+            }
+           
+            for(let i=0;i<number;i++){
+                const p = ((result[i] / total) * 100).toFixed(2); 
+                vresult += `, ${options[i]}: ${result[i]}人（${p}％）`
+            }
+
+            const obj = {
+                type: 'log', 
+                name: 'host', 
+                content: vresult
+            }
+            ws.send(JSON.stringify(obj)); // JSON形式で送信
+
+            closeButton.addEventListener('click', () => {
+                /*投票を閉じますか？の確認＋ダウンロード +mainSpaceのクリア*/
+                var conf = confirm("投票結果を本当に閉じますか？")
+                if(conf){
+                    mainSpace.innerHTML="";
+                    /*投票結果のダウンロード（不要かも？）*/
+                    let voteContent=vresult;
+                    const blob = new Blob([voteContent], { type: 'text/plain' });
+                    const url = URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = 'vote_result.txt';
+                    a.click();
+                    URL.revokeObjectURL(url);
+                }
+            });
         }
     };
     

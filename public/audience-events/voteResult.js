@@ -97,6 +97,9 @@ window.addEventListener('message', (event) => {
                             anchor: 'end',
                             align: 'start',
                             formatter: (value) => {
+                                if(value === 0){
+                                    return ``;
+                                }
                                 return `${value}人`;
                             },
                             color: '#000',
