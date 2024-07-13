@@ -2,12 +2,15 @@ document.addEventListener('DOMContentLoaded', function() {
     const worksheetBtn = document.getElementById('worksheet-btn');
     const voteBtn = document.getElementById('vote-btn');
     const endEventBtn = document.getElementById('end-event-btn');
+    const worksheet_ans_Btn = document.getElementById('worksheet-ans-btn'); // ワークシートの回答ダウンロード処理のテスト用ボタン
     const chatMessages = document.getElementById('chat-messages');
     const questions = document.getElementById('questions');
     const mainSpace = document.getElementById('mainSpace');
 
     const hostname = window.location.hostname;
     const ws = new WebSocket(`ws://${hostname}:3000`);
+    
+    const worksheet_ans = [];
 
     var num_of_connection = 0;
 
@@ -245,8 +248,8 @@ document.addEventListener('DOMContentLoaded', function() {
            
             /*コメントに投票結果を流す */
             let total = result.reduce(function(sum, elem){
-                            return sum + elem;
-                        }, 0);
+                return sum + elem;
+            }, 0);
             var vresult;
             if(multi){
                 vresult = `【投票結果】 お題: ${title}（複数選択可）`
@@ -284,6 +287,7 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         }else if(type==="worksheetSend"){
             alert("ワークシートの回答を収集しました");
+            worksheet_ans.push(name + ": " + content);
         }
     };
     
@@ -611,6 +615,17 @@ document.addEventListener('DOMContentLoaded', function() {
                 })
                 .catch(error => console.error('Error:', error));
         }
+    });
+
+    worksheet_ans_Btn.addEventListener('click', () => {
+        /*ワークシートの回答のダウンロード*/
+        const blob = new Blob([worksheet_ans], { type: 'text/plain' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'worksheet_result.txt';
+        a.click();
+        URL.revokeObjectURL(url);
     });
 
     // // チャットメッセージのデモ表示
