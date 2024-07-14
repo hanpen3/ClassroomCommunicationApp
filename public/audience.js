@@ -10,7 +10,7 @@ commentButton.style.width = (window.innerWidth * 0.3) + "px";
 const questionButton = document.getElementById('question');
 questionButton.style.height = (window.innerHeight * 0.05) + "px";
 questionButton.style.width = (window.innerWidth * 0.3) + "px";
-
+const eventName = document.getElementById('eventName');
 
 const hostname = window.location.hostname;
 const ws = new WebSocket(`ws://${hostname}:3000`);
@@ -42,8 +42,13 @@ ws.onopen = () => {
         type: 'connection', 
         content: null
     }
+    const obj_eventNameRequest = {
+        type: 'eventNameRequest', 
+        content: null
+    }
     ws.send(JSON.stringify(obj_log));
     ws.send(JSON.stringify(obj_connection));
+    ws.send(JSON.stringify(obj_eventNameRequest));
 };
 
 window.onbeforeunload = () => {
@@ -121,6 +126,8 @@ ws.onmessage = (event) => {
         setTimeout(() => {
                 image.remove();
         }, 3000);
+    }else if(type==="eventNameSet"){
+        eventName.textContent = content;
     }
 };
 

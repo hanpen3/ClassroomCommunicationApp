@@ -1,10 +1,14 @@
-/* ボディ全体のスタイル設定 */
 body {
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
     background-color: #f0f0f0;
-  }
+}
+
+#eventName {
+  font-size: 2em; /* 文字サイズを大きくする (2emは通常の2倍のサイズ) */
+  font-weight: bold; /* 太字にする */
+}
   
   /* コンテンツの最大幅とセンタリング */
   .container {
@@ -77,11 +81,26 @@ body {
     background-color: #0056b3;
   }
   
-  /* チャット表示と質問表示エリアのスクロール設定 */
   #chat-display, #question-display {
-    height: 300px;
-    overflow-y: auto;
-  }
+    background-color: white;
+    border: 1px solid #ccc;
+    padding: 20px;
+    border-radius: 5px;
+    height: 400px; /* 高さを固定 */
+}
+
+#chat-title, #question-title {
+    position: sticky; /* タイトルを固定 */
+    top: 0; /* 上部に固定 */
+    background-color: white; /* 背景色を白に設定 */
+    padding: 10px; /* タイトルに余白を追加 */
+    z-index: 1; /* 他の要素の上に表示 */
+}
+
+#chat-messages, #questions {
+    height: calc(100% - 50px); /* タイトルの高さを考慮して高さを調整 */
+    overflow-y: auto; /* スクロール可能にする */
+}
 
   /* リアクション画像のアニメーション用スタイル */
 .reaction-animation {

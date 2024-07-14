@@ -1,26 +1,71 @@
 document.addEventListener('DOMContentLoaded', function() {
-    const worksheetBtn = document.getElementById('worksheet-btn');
-    const voteBtn = document.getElementById('vote-btn');
-    const endEventBtn = document.getElementById('end-event-btn');
-    const worksheet_ans_Btn = document.getElementById('worksheet-ans-btn'); // ワークシートの回答ダウンロード処理のテスト用ボタン
-    const chatMessages = document.getElementById('chat-messages');
-    const questions = document.getElementById('questions');
-    const mainSpace = document.getElementById('mainSpace');
+const worksheetBtn = document.getElementById('worksheet-btn');
+const voteBtn = document.getElementById('vote-btn');
+const endEventBtn = document.getElementById('end-event-btn');
+const worksheet_ans_Btn = document.getElementById('worksheet-ans-btn'); // ワークシートの回答ダウンロード処理のテスト用ボタン
+const chatMessages = document.getElementById('chat-messages');
+const questions = document.getElementById('questions');
+const mainSpace = document.getElementById('mainSpace');
+const event = document.getElementById('eventName');
 
-    const hostname = window.location.hostname;
-    const ws = new WebSocket(`ws://${hostname}:3000`);
+
+const hostname = window.location.hostname;
+const ws = new WebSocket(`ws://${hostname}:3000`);
     
-    const worksheet_ans = []; // 回答保存用配列
+const worksheet_ans = []; // 回答保存用配列
 
-    var num_of_connection = 0;
+var num_of_connection = 0;
+
+var eventName = prompt("イベント名を入力");
+event.textContent = eventName;
 
     /*自分が主催者であることをサーバに送信 */
-    ws.onopen = () => {
-        const obj = {
-            type: 'host'
-        }
-        ws.send(JSON.stringify(obj)); // JSON形式で送信
+ws.onopen = () => {
+    const obj = {
+        type: 'host',
+        name: 'host',
+        content: ''
     }
+    ws.send(JSON.stringify(obj)); // JSON形式で送信
+    const obj_name = {
+        type: 'eventName',
+        name: 'host',
+        content: eventName
+    }
+    ws.send(JSON.stringify(obj_name)); // JSON形式で送信
+}
+
+    // チャットメッセージの高さ調整
+function adjustChatHeight() {
+    const chatDisplay = document.getElementById('chat-display');
+    const chatTitle = document.getElementById('chat-title');
+    const chatMessages = document.getElementById('chat-messages');
+  
+    const chatDisplayHeight = chatDisplay.clientHeight;
+    const chatTitleHeight = chatTitle.clientHeight;
+  
+    chatMessages.style.height = `${chatDisplayHeight - chatTitleHeight - 20}px`; // 20pxはpaddingの分
+  }
+  
+  // 質問の高さ調整
+  function adjustQuestionHeight() {
+    const questionDisplay = document.getElementById('question-display');
+    const questionTitle = document.getElementById('question-title');
+    const questions = document.getElementById('questions');
+  
+    const questionDisplayHeight = questionDisplay.clientHeight;
+    const questionTitleHeight = questionTitle.clientHeight;
+  
+    questions.style.height = `${questionDisplayHeight - questionTitleHeight - 20}px`; // 20pxはpaddingの分
+  }
+  
+  // 初期化時に高さ調整
+  adjustChatHeight();
+  adjustQuestionHeight();
+  
+  // ウィンドウサイズ変更時に高さ調整
+  window.addEventListener('resize', adjustChatHeight);
+  window.addEventListener('resize', adjustQuestionHeight);
     
     //◎主催者はユーザ名の入力、入退出のログ必要ない？？
 

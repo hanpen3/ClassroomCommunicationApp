@@ -13,6 +13,7 @@ app.use(express.static('public')); // 提供ディレクトリを'public'に設�
 let clients = [];
 var oneTimePass;
 let host;
+let eventName;
 
 function setOnetimePass() {
     oneTimePass = Math.floor(1000 + Math.random() * 9000);
@@ -86,7 +87,30 @@ wss.on('connection', (ws) => {
                 }
             });
             break;
-
+        case 'eventName':
+            eventName = content;
+            wss.clients.forEach((client) => {
+                if (client.readyState === WebSocket.OPEN) {
+                    client.send(JSON.stringify({
+                        type: 'eventNameSet',
+                        name: 'server',
+                        content: eventName
+                    }));
+                }
+            });
+            break;
+        case 'eventNameRequest':
+            wss.clients.forEach((client) => {
+                if (client.readyState === WebSocket.OPEN) {
+                    client.send(JSON.stringify({
+                        type: 'eventNameSet',
+                        name: 'server',
+                        content: eventName
+                    }));
+                }
+            });
+            console.log(eventName);
+            break;
         // case 'vote': //ホストのみに送るものはここに書く(投票、ワークシート)
         //     if (host.readyState === WebSocket.OPEN) {
         //         host.send(JSON.stringify(data)); // JSON形式で送信

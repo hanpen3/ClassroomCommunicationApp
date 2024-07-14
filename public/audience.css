@@ -247,3 +247,8 @@ body {
   position: relative;
   overflow: hidden;
 }
+
+#eventName {
+  font-size: 2em; /* 文字サイズを大きくする (2emは通常の2倍のサイズ) */
+  font-weight: bold; /* 太字にする */
+}
