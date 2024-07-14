@@ -3,27 +3,39 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>主催者側 メイン画面</title>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
+    <title>イベントダッシュボード</title>
     <link rel="stylesheet" href="host.css">
 </head>
 <body>
-    <div class="container">
+    <div class="header">
         <label id="eventName">イベント</label>
+        <div class="header-actions">
+            <button id="worksheet-btn">ワークシート</button>
+            <button id="vote-btn">投票</button>
+            <button id="end-event-btn">イベントを終了</button>
+            <button id="worksheet-ans-btn">ワークシートの回答</button>
+        </div>
+    </div>
+    <div class="container">
+        <div class="status-box">
+            <div class="status-item">
+                <h3>接続人数</h3>
+                <p id="connection-count">0人</p>
+            </div>
+            <div class="status-item">
+                <h3>チャット数</h3>
+                <p id="chat-count">0</p>
+            </div>
+            <div class="status-item">
+                <h3>質問数</h3>
+                <p id="question-count">0</p>
+            </div>
+        </div>
         <div class="main-content">
             <div class="left-panel">
                 <div id="versatile-space">
                     <h2>汎用スペース</h2>
-                    <p>(投票/リアクションを表示)</p>
                     <div id="mainSpace"></div>
-                </div>
-                <div class="bottom-panel">
-                    <p id="connection-count">接続: 0人</p>
-                    <button id="worksheet-btn">ワークシート</button>
-                    <button id="vote-btn">投票</button>
-                    <button id="end-event-btn">イベントを終了</button>
-                    <button id="worksheet-ans-btn">ワークシートの回答</button>
                 </div>
             </div>
             <div class="right-panel">

@@ -19,6 +19,9 @@ var num_of_connection = 0;
 var eventName = prompt("イベント名を入力");
 event.textContent = eventName;
 
+    let chatCount = 0;  //コメントの数
+    let questionCount = 0;  //質問の数
+
     /*自分が主催者であることをサーバに送信 */
 ws.onopen = () => {
     const obj = {
@@ -122,7 +125,7 @@ function adjustChatHeight() {
             /*同時接続数の更新( - )*/
             num_of_connection--;
             const connectionCount = document.getElementById('connection-count');
-            connectionCount.textContent = `接続: ${num_of_connection}人`; // 文字列として処理 : 主催者も含まれるので、-1 する
+            connectionCount.textContent = `${num_of_connection}人`; // 文字列として処理 : 主催者も含まれるので、-1 する
         }else if(type==="reaction"){
             /*リアクションを表示する */
             const image = document.createElement('img');
@@ -313,6 +316,8 @@ function adjustChatHeight() {
                 content: vresult
             }
             ws.send(JSON.stringify(obj)); // JSON形式で送信
+            voteBtn.disabled = false; //投票・ワークシートボタンを有効化
+            worksheetBtn.disabled = false;
 
             closeButton.addEventListener('click', () => {
                 /*投票を閉じますか？の確認＋ダウンロード +mainSpaceのクリア*/
@@ -332,8 +337,25 @@ function adjustChatHeight() {
             });
         }else if(type==="worksheetSend"){
             worksheet_ans.push(name + ": " + content + "\n");
+        }else if(type=="updateCounts"){
+            chatCount = obj.chatCount;
+            questionCount = obj.questionCount;
+            updateCountDisplay();
         }
     };
+
+    function updateCountDisplay() {
+        const chatCountElement = document.getElementById('chat-count');
+        const questionCountElement = document.getElementById('question-count');
+        
+        if (chatCountElement) {
+          chatCountElement.textContent = `${chatCount}`;
+        }
+        
+        if (questionCountElement) {
+          questionCountElement.textContent = `${questionCount}`;
+        }
+      }
     
     /* ホストがサーバーによって切断される場合の処理 */
     ws.onclose = (event) => {
@@ -343,78 +365,109 @@ function adjustChatHeight() {
         chatMessages.scrollTop = chatMessages.scrollHeight;
     };
 
+    var wsFlag = true; //ワークシートボタン押せるかどうか
     // ワークシートボタンのクリックイベント
+    var remainTime;
     worksheetBtn.addEventListener('click', () => {
-        mainSpace.innerHTML=''; //mainSpaceを空にする
-        const form=document.createElement('form');
-
-        const titleLabel=document.createElement('label');
-        titleLabel.textContent = 'お題を入力: ';
-        const titleInput = document.createElement('input');
-        titleInput.type = 'text';
-        titleInput.id = 'worksheetTitle';
-        
-        form.appendChild(titleLabel);
-        form.appendChild(titleInput);
-        form.appendChild(document.createElement('br'));
-
-        const timeLimit=document.createElement('limit');
-        timeLimit.textContent = '制限時間: ';
-        const timeLimitSelect = document.createElement('select');
-        timeLimitSelect.id = 'timeLimit';
-        const timeLimits = [1, 2, 3, 4, 5];
-        timeLimits.forEach(time => {
-            const option = document.createElement('option');
-            option.value = time;
-            option.textContent = `${time}`;
-            timeLimitSelect.appendChild(option);
-        });
-        const timeUnitLabel = document.createElement('label');
-        timeUnitLabel.textContent = '分';
-        form.appendChild(timeLimit);
-        form.appendChild(timeLimitSelect);
-        form.appendChild(timeUnitLabel);
-        form.appendChild(document.createElement('br'));
-
-        const startButton = document.createElement('button');
-        startButton.type = 'button';
-        startButton.textContent = 'ワークシートを実施';
-        startButton.id = 'startWorkSheetButton';
-        form.appendChild(startButton);
-
-        const quitButton = document.createElement('button');
-        quitButton.type = 'button';
-        quitButton.textContent = 'やめる';
-        quitButton.id = 'quitWorkSheetButton';
-        form.appendChild(quitButton);
-
-        mainSpace.appendChild(form);
-        mainSpace.scrollTop = mainSpace.scrollHeight;
-        //window.location.href = './events/worksheet.html';
-
-        startButton.onclick = () => {
-            const info = {
-                title: titleInput.value, //お題
-                time: timeLimitSelect.value //制限時間
-            }
-            if (info.title) {
-                const obj = {
-                    type: 'worksheet', 
-                    name: 'server',
-                    content: info
+        if(wsFlag){
+            mainSpace.innerHTML=''; //mainSpaceを空にする
+            const form=document.createElement('form');
+    
+            const titleLabel=document.createElement('label');
+            titleLabel.textContent = 'お題を入力: ';
+            const titleInput = document.createElement('input');
+            titleInput.type = 'text';
+            titleInput.id = 'worksheetTitle';
+            
+            form.appendChild(titleLabel);
+            form.appendChild(titleInput);
+            form.appendChild(document.createElement('br'));
+    
+            const timeLimit=document.createElement('limit');
+            timeLimit.textContent = '制限時間: ';
+            const timeLimitSelect = document.createElement('select');
+            timeLimitSelect.id = 'timeLimit';
+            const timeLimits = [1, 2, 3, 4, 5];
+            timeLimits.forEach(time => {
+                const option = document.createElement('option');
+                option.value = time;
+                option.textContent = `${time}`;
+                timeLimitSelect.appendChild(option);
+            });
+            const timeUnitLabel = document.createElement('label');
+            timeUnitLabel.textContent = '分';
+            form.appendChild(timeLimit);
+            form.appendChild(timeLimitSelect);
+            form.appendChild(timeUnitLabel);
+            form.appendChild(document.createElement('br'));
+    
+            const startButton = document.createElement('button');
+            startButton.type = 'button';
+            startButton.textContent = 'ワークシートを実施';
+            startButton.id = 'startWorkSheetButton';
+            form.appendChild(startButton);
+    
+            const quitButton = document.createElement('button');
+            quitButton.type = 'button';
+            quitButton.textContent = 'やめる';
+            quitButton.id = 'quitWorkSheetButton';
+            form.appendChild(quitButton);
+    
+            mainSpace.appendChild(form);
+            mainSpace.scrollTop = mainSpace.scrollHeight;
+            //window.location.href = './events/worksheet.html';
+    
+            startButton.onclick = () => {
+                const info = {
+                    title: titleInput.value, //お題
+                    time: timeLimitSelect.value //制限時間
                 }
-                ws.send(JSON.stringify(obj)); // JSON形式で送信
+                if (info.title) {
+                    const obj = {
+                        type: 'worksheet', 
+                        name: 'server',
+                        content: info
+                    }
+                    ws.send(JSON.stringify(obj)); // JSON形式で送信
+                    mainSpace.innerHTML=''; //汎用スペースをクリア
+                    wsFlag=false;
+                    alert('ワークシートの内容が送信されました！');
+    
+                    /* 再度ワークシートボタンが押せるようになるまでの時間を計る*/
+                    let countdownInterval;
+                    const secondsCountdown = () => { //秒をカウントダウンする
+                        if(countdownInterval){ //前回のカウントダウンが残っている場合
+                            clearInterval(countdownInterval);
+                        }  
+                        const timeLimit = parseInt(info.time) * 60;
+                        remainTime = timeLimit;
+    
+                        //カウントダウンのセットアップ
+                        countdownInterval = setInterval(()=>{
+                            remainTime--;
+            
+                            if(remainTime <= 0){
+                                clearInterval(countdownInterval);
+                                wsFlag=true;
+                            }
+                        }, 1000);
+                    };
+            
+                    secondsCountdown(); //カウントダウンを開始
+    
+                }else {
+                    alert('ワークシートの内容が空です。');
+                }
+            };
+    
+            quitButton.onclick = () => {
                 mainSpace.innerHTML=''; //汎用スペースをクリア
-                alert('ワークシートの内容が送信されました！');
-            }else {
-                alert('ワークシートの内容が空です。');
-            }
-        };
-
-        quitButton.onclick = () => {
-            mainSpace.innerHTML=''; //汎用スペースをクリア
-            alert('ワークシートの作成をやめました！');
-        };
+                alert('ワークシートの作成をやめました！');
+            };
+        }else{ //ワークシート実施中の場合
+            alert(`ワークシート実施中です。あと ${remainTime} 秒お待ちください。`);
+        }
+        
 
     });
 
@@ -547,6 +600,8 @@ function adjustChatHeight() {
                     return;
                 }
             }
+            voteBtn.disabled = true; //投票・ワークシートボタンを無効化
+            worksheetBtn.disabled = true;
 
             const info = { //投票に関する情報
                 title: titleInput.value,  

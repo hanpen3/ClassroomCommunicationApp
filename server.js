@@ -7,6 +7,9 @@ const WebSocket = require('ws');
 const app = express();
 const server = http.createServer(app);
 const wss = new WebSocket.Server({ server });
+let chatCount = 0;  // チャットの数
+let questionCount = 0;  // 質問の数
+
 
 app.use(express.static('public')); // 提供ディレクトリを'public'に設定
 
@@ -36,6 +39,14 @@ wss.on('connection', (ws) => {
         var sobj; //送信するオブジェクト
 
         console.log(`MessageReceived type:${type}, name:${name}, "${content}"`);
+
+        if (type === "comment") {
+            chatCount++;
+            broadcastCounts();
+          } else if (type === "question") {
+            questionCount++;
+            broadcastCounts();
+          }
 
         switch(type) {
         case 'host': /*ホストの登録*/
@@ -118,7 +129,7 @@ wss.on('connection', (ws) => {
         //     console.log("voteを送信しました");
         //     break;
         case 'worksheet': //ワークシートの内容を受信
-        console.log(`voteContent: title:${content.title}, time:${content.time}`);
+        console.log(`worksheetContent: title:${content.title}, time:${content.time}`);
             // ワークシートの内容を全クライアントに送信
             wss.clients.forEach((client) => {
             if (client.readyState === WebSocket.OPEN) {
@@ -159,6 +170,20 @@ wss.on('connection', (ws) => {
             });
         }
     });
+
+    function broadcastCounts() {
+        const countsData = JSON.stringify({
+          type: 'updateCounts',
+          chatCount: chatCount,
+          questionCount: questionCount
+        });
+        
+        wss.clients.forEach((client) => {
+          if (client.readyState === WebSocket.OPEN) {
+            client.send(countsData);
+          }
+        });
+      }
 
     /* クライアント切断時の動作 */
     ws.on('close', () => {
