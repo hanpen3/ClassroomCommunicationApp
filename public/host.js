@@ -710,7 +710,7 @@ function adjustChatHeight() {
 
                     
 
-                    window.location.href = './events/end-event.html';
+                    window.close();
                 })
                 .catch(error => console.error('Error:', error));
         }
