@@ -10,6 +10,9 @@ commentButton.style.width = (window.innerWidth * 0.3) + "px";
 const questionButton = document.getElementById('question');
 questionButton.style.height = (window.innerHeight * 0.05) + "px";
 questionButton.style.width = (window.innerWidth * 0.3) + "px";
+const exitButton = document.getElementById('exit');
+exitButton.style.height = (window.innerHeight * 0.04) + "px";
+exitButton.style.width = (window.innerWidth * 0.2) + "px";
 
 
 const hostname = window.location.hostname;
@@ -164,6 +167,12 @@ questionButton.onclick = () => {
         }
         ws.send(JSON.stringify(obj)); // JSON形式で送信
     messageInput.value = '';
+    }
+};
+
+exitButton.onclick = () => {
+    if(confirm("本当に退出しますか？")){
+        window.location.href = './audience-events/exit.html';
     }
 };
 
