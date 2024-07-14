@@ -268,6 +268,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 content: vresult
             }
             ws.send(JSON.stringify(obj)); // JSON形式で送信
+            voteBtn.disabled = false; //投票・ワークシートボタンを有効化
+            worksheetBtn.disabled = false;
 
             closeButton.addEventListener('click', () => {
                 /*投票を閉じますか？の確認＋ダウンロード +mainSpaceのクリア*/
@@ -502,6 +504,8 @@ document.addEventListener('DOMContentLoaded', function() {
                     return;
                 }
             }
+            voteBtn.disabled = true; //投票・ワークシートボタンを無効化
+            worksheetBtn.disabled = true;
 
             const info = { //投票に関する情報
                 title: titleInput.value,  

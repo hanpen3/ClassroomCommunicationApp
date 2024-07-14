@@ -94,7 +94,7 @@ wss.on('connection', (ws) => {
         //     console.log("voteを送信しました");
         //     break;
         case 'worksheet': //ワークシートの内容を受信
-        console.log(`voteContent: title:${content.title}, time:${content.time}`);
+        console.log(`worksheetContent: title:${content.title}, time:${content.time}`);
             // ワークシートの内容を全クライアントに送信
             wss.clients.forEach((client) => {
             if (client.readyState === WebSocket.OPEN) {
