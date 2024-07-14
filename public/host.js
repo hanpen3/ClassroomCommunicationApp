@@ -14,6 +14,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
     var num_of_connection = 0;
 
+    let chatCount = 0;  //コメントの数
+    let questionCount = 0;  //質問の数
+
     /*自分が主催者であることをサーバに送信 */
     ws.onopen = () => {
         const obj = {
@@ -77,7 +80,7 @@ document.addEventListener('DOMContentLoaded', function() {
             /*同時接続数の更新( - )*/
             num_of_connection--;
             const connectionCount = document.getElementById('connection-count');
-            connectionCount.textContent = `接続: ${num_of_connection}人`; // 文字列として処理 : 主催者も含まれるので、-1 する
+            connectionCount.textContent = `${num_of_connection}人`; // 文字列として処理 : 主催者も含まれるので、-1 する
         }else if(type==="reaction"){
             /*リアクションを表示する */
             const image = document.createElement('img');
@@ -289,8 +292,25 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         }else if(type==="worksheetSend"){
             worksheet_ans.push(name + ": " + content + "\n");
+        }else if(type=="updateCounts"){
+            chatCount = obj.chatCount;
+            questionCount = obj.questionCount;
+            updateCountDisplay();
         }
     };
+
+    function updateCountDisplay() {
+        const chatCountElement = document.getElementById('chat-count');
+        const questionCountElement = document.getElementById('question-count');
+        
+        if (chatCountElement) {
+          chatCountElement.textContent = `${chatCount}`;
+        }
+        
+        if (questionCountElement) {
+          questionCountElement.textContent = `${questionCount}`;
+        }
+      }
     
     /* ホストがサーバーによって切断される場合の処理 */
     ws.onclose = (event) => {
