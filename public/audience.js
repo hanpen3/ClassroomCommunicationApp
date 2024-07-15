@@ -14,6 +14,7 @@ const exitButton = document.getElementById('exit');
 exitButton.style.height = (window.innerHeight * 0.04) + "px";
 exitButton.style.width = (window.innerWidth * 0.2) + "px";
 const eventName = document.getElementById('eventName');
+const anonymous = document.getElementById('anonymous');
 
 const hostname = window.location.hostname;
 const ws = new WebSocket(`ws://${hostname}:3000`);
@@ -81,12 +82,20 @@ ws.onmessage = (event) => {
         chat.scrollTop = chat.scrollHeight;
     }else if(type==="comment"){
         const message = document.createElement('div');
-        message.textContent = name+": "+content; // メッセージを文字列として処理
+        if(content.anonymous){ //匿名の場合
+            message.textContent = content.message;
+        }else{
+            message.textContent = name+": "+content.message;
+        }
         chat.appendChild(message);
         chat.scrollTop = chat.scrollHeight;
     }else if(type==="question"){
         const message = document.createElement('div');
-        message.textContent = name+": "+content; // メッセージを文字列として処理
+        if(content.anonymous){ //匿名の場合
+            message.textContent = content.message;
+        }else{
+            message.textContent = name+": "+content.message;
+        }
         message.style.color = 'red';
         chat.appendChild(message);
         chat.scrollTop = chat.scrollHeight;
@@ -152,12 +161,15 @@ ws.onclose = (event) => {
 };
 
 commentButton.onclick = () => {
-    const message = messageInput.value;
-    if (message) {
+    const info = {
+        message: messageInput.value,  
+        anonymous: anonymous.checked
+    }
+    if (info.message) {
         const obj = {
             type: 'comment', 
             name: username, 
-            content: message
+            content: info
         }
         ws.send(JSON.stringify(obj)); // JSON形式で送信
     messageInput.value = '';
@@ -165,12 +177,15 @@ commentButton.onclick = () => {
 };
 
 questionButton.onclick = () => {
-    const message = messageInput.value;
+    const info = {
+        message: messageInput.value,  
+        anonymous: anonymous.checked
+    }
     if (message) {
         const obj = {
             type: 'question',
             name: username, 
-            content: message
+            content: info
         }
         ws.send(JSON.stringify(obj)); // JSON形式で送信
     messageInput.value = '';

@@ -107,13 +107,21 @@ function adjustChatHeight() {
         }else if(type==="comment"){
             /*コメントの処理*/
             const message = document.createElement('div');
-            message.textContent = name+": "+content; // メッセージを文字列として処理
+            if(content.anonymous){ //匿名の場合
+                message.textContent = content.message;
+            }else{
+                message.textContent = name+": "+content.message;
+            }
             chatMessages.appendChild(message);
             chatMessages.scrollTop = chatMessages.scrollHeight;
         }else if(type==="question"){
             /*質問の処理*/
             const message = document.createElement('div');
-            message.textContent = name+": "+content; // メッセージを文字列として処理
+            if(content.anonymous){ //匿名の場合
+                message.textContent = content.message;
+            }else{
+                message.textContent = name+": "+content.message;
+            }
             questions.appendChild(message);
             questions.scrollTop = questions.scrollHeight;
         }else if(type==="connection"){
