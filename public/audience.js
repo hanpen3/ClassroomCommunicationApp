@@ -172,7 +172,7 @@ commentButton.onclick = () => {
             content: info
         }
         ws.send(JSON.stringify(obj)); // JSON形式で送信
-    messageInput.value = '';
+        messageInput.value = '';
     }
 };
 

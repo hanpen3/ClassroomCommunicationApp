@@ -345,9 +345,34 @@ function adjustChatHeight() {
                 }
             });
         }else if(type==="worksheetSend"){
+            /* ワークシートの内容を配列にプッシュ */
             worksheet_ans.push("【" + name + "】: " + content + "\n\n");
-            //const image = document.createElement('img');
-            //image.src="./images/clear_good.png";
+
+            /* ワークシート受信を通知 */
+            const message = document.createElement('div');
+            message.textContent = "ワークシートを受信しました"; // メッセージを表示
+            chatMessages.appendChild(message);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+
+            /* アニメーションの設定 */
+            const image = document.createElement('img');
+            image.src="./images/clear_submit.png";
+            image.width=30;
+            image.height=30;
+            image.classList.add('reaction-animation');
+
+            const chatContainer = document.getElementById('versatile-space');  // チャットコンテナ要素を取得
+            /* ランダムな水平位置を設定 */
+            const maxLeft = chatContainer.clientWidth - image.width;  // 最大の左位置
+            const randomLeft = Math.floor(Math.random() * maxLeft);  // ランダムな左位置を計算
+            image.style.left = `${randomLeft}px`;  // 画像の左位置を設定
+
+            chatContainer.appendChild(image);  // 画像要素をチャットコンテナに追加
+
+            /* アニメーション終了後に要素を削除 */
+            setTimeout(() => {
+                image.remove();
+            }, 5000);
         }else if(type=="updateCounts"){
             chatCount = obj.chatCount;
             questionCount = obj.questionCount;

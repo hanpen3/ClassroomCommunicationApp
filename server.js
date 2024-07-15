@@ -43,10 +43,10 @@ wss.on('connection', (ws) => {
         if (type === "comment") {
             chatCount++;
             broadcastCounts();
-          } else if (type === "question") {
+        } else if (type === "question") {
             questionCount++;
             broadcastCounts();
-          }
+        }
 
         switch(type) {
         case 'host': /*ホストの登録*/
