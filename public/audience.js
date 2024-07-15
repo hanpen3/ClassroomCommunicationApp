@@ -179,7 +179,7 @@ questionButton.onclick = () => {
 
 exitButton.onclick = () => {
     if(confirm("本当に退出しますか？")){
-        window.close();
+        window.location.href='./audience-events/exit.html';
     }
 };
 
