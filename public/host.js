@@ -687,8 +687,6 @@ function adjustChatHeight() {
         
     });
 
-    
-    
     /* イベント終了ボタンで全クライアントの接続を切断 */
     endEventBtn.addEventListener('click', () => {
         if (confirm('イベントを終了してもよろしいですか？')) {
@@ -717,9 +715,7 @@ function adjustChatHeight() {
                     a.click();
                     URL.revokeObjectURL(url);
 
-                    
-
-                    window.close();
+                    window.location.href = "./events/end-event.html";
                 })
                 .catch(error => console.error('Error:', error));
         }
