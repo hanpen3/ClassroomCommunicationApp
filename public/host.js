@@ -344,7 +344,9 @@ function adjustChatHeight() {
                 }
             });
         }else if(type==="worksheetSend"){
-            worksheet_ans.push(name + ": " + content + "\n");
+            worksheet_ans.push("【" + name + "】: " + content + "\n\n");
+            //const image = document.createElement('img');
+            //image.src="./images/clear_good.png";
         }else if(type=="updateCounts"){
             chatCount = obj.chatCount;
             questionCount = obj.questionCount;
@@ -431,6 +433,8 @@ function adjustChatHeight() {
                     time: timeLimitSelect.value //制限時間
                 }
                 if (info.title) {
+                    worksheet_ans.push("タイトル : " + info.title + "\n\n"); // ワークシートのタイトルをログに残す
+
                     const obj = {
                         type: 'worksheet', 
                         name: 'server',
@@ -463,7 +467,7 @@ function adjustChatHeight() {
             
                     secondsCountdown(); //カウントダウンを開始
     
-                }else {
+                }else{
                     alert('ワークシートの内容が空です。');
                 }
             };
