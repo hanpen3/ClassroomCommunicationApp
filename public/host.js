@@ -519,6 +519,7 @@ function adjustChatHeight() {
         const multipleCheckbox = document.createElement('input');
         multipleCheckbox.type = 'checkbox';
         multipleCheckbox.id = 'multipleSelection';
+        multipleLabel.htmlFor = 'multipleSelection';
         form.appendChild(multipleLabel);
         form.appendChild(multipleCheckbox);
         form.appendChild(document.createElement('br'));

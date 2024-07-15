@@ -29,10 +29,11 @@ window.addEventListener('message', (event) => {
                 const optionInput = document.createElement('input');
                 optionInput.type = 'checkbox';
                 optionInput.name = `multiSelect`;
+                optionInput.id = `option${i + 1}`;
                 optionInput.value= i ; //0から7
                 //optionInput.classList.add('optionInput');
                 const optionLabel = document.createElement('label');
-                optionLabel.for=`option${i + 1}`;
+                optionLabel.htmlFor=`option${i + 1}`;
                 optionLabel.textContent = `${options[i]}`;
                 voteOptions.appendChild(optionInput);
                 voteOptions.appendChild(optionLabel);
@@ -49,10 +50,11 @@ window.addEventListener('message', (event) => {
                 const optionInput = document.createElement('input');
                 optionInput.type = 'radio';
                 optionInput.name = `oneSelect`; //一つしか選べないようにする
+                optionInput.id = `option${i + 1}`;
                 optionInput.value= i ; //0から7
                 //optionInput.classList.add('optionInput');
                 const optionLabel = document.createElement('label');
-                optionLabel.for=`option${i + 1}`;
+                optionLabel.htmlFor=`option${i + 1}`;
                 optionLabel.textContent = `${options[i]}`;
                 voteOptions.appendChild(optionInput);
                 voteOptions.appendChild(optionLabel);
