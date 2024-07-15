@@ -181,6 +181,7 @@ function adjustChatHeight() {
             const myChart = document.createElement('canvas');
             myChart.id="myChart";
             mainSpace.appendChild(myChart);
+            mainSpace.appendChild(document.createElement('br'));
             const closeButton = document.createElement('button');
             closeButton.id="close";
             closeButton.type="button";
@@ -388,6 +389,7 @@ function adjustChatHeight() {
             const titleInput = document.createElement('input');
             titleInput.type = 'text';
             titleInput.id = 'worksheetTitle';
+            titleInput.style.width = '75%';
             
             form.appendChild(titleLabel);
             form.appendChild(titleInput);
@@ -421,6 +423,7 @@ function adjustChatHeight() {
             quitButton.type = 'button';
             quitButton.textContent = 'やめる';
             quitButton.id = 'quitWorkSheetButton';
+            quitButton.style.margin='10px';
             form.appendChild(quitButton);
     
             mainSpace.appendChild(form);
@@ -495,6 +498,7 @@ function adjustChatHeight() {
         const titleInput = document.createElement('input');
         titleInput.type = 'text';
         titleInput.id = 'voteTitle';
+        titleInput.style.width='75%';
         form.appendChild(titleLabel);
         form.appendChild(titleInput);
         form.appendChild(document.createElement('br')); //改行
@@ -571,6 +575,7 @@ function adjustChatHeight() {
         quitVoteButton.type = 'button';
         quitVoteButton.textContent = 'やめる';
         quitVoteButton.id = 'quitVoteButton';
+        quitVoteButton.style.margin = "10px";
         form.appendChild(quitVoteButton);
 
         mainSpace.appendChild(form);
@@ -585,6 +590,7 @@ function adjustChatHeight() {
                 const optionInput = document.createElement('input');
                 optionInput.type = 'text';
                 optionInput.name = `option${i + 1}`;
+                optionInput.style.width = '15%';
                 optionInput.classList.add('optionInput');
                 optionsContainer.appendChild(optionLabel);
                 optionsContainer.appendChild(optionInput);
@@ -641,6 +647,8 @@ function adjustChatHeight() {
                 countDownLabel1.textContent = `投票終了まで残り `;
                 mainSpace.appendChild(countDownLabel1);
                 const count = document.createElement('span');
+                count.style.fontSize='18px';
+                count.style.fontWeight='bold';
                 mainSpace.appendChild(count);
                 const countDownLabel2 = document.createElement('span');
                 countDownLabel2.textContent = ` 秒`;
@@ -691,8 +699,6 @@ function adjustChatHeight() {
         
     });
 
-    
-    
     /* イベント終了ボタンで全クライアントの接続を切断 */
     endEventBtn.addEventListener('click', () => {
         if (confirm('イベントを終了してもよろしいですか？')) {
@@ -721,9 +727,7 @@ function adjustChatHeight() {
                     a.click();
                     URL.revokeObjectURL(url);
 
-                    
-
-                    window.close();
+                    window.location.href = "./events/end-event.html";
                 })
                 .catch(error => console.error('Error:', error));
         }

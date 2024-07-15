@@ -1,0 +1,36 @@
+  
+  /* ボディ全体のスタイル設定 */
+  body {
+    font-family: 'Noto Sans JP', sans-serif;
+    background-color: #ffffff;
+    color: #333;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    /* justify-content: center; */
+    align-items: center;
+    overflow: hidden;
+  }
+  
+  /* ボタンのスタイル設定 */
+  #back-btn {
+    padding: 12px 20px;
+    background-color: #00a8ff;
+    color: white;
+    border: none;
+    border-radius: 25px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.1s;
+  }
+  
+  /* ボタンのホバー時のスタイル */
+  #back-btn:hover {
+    background-color: #0097e6;
+  }
+  
+  /* ボタンのクリック時のスタイル */
+  #back-btn:active {
+    transform: scale(0.95);
+  }
+  

@@ -6,16 +6,13 @@ body {
     height: 100vh;
     display: flex;
     flex-direction: column;
+    /* justify-content: center; */
+    align-items: center;
     overflow: hidden;
   }
   
-  #voteTitle{
-    font-size: 20px;
-    font-weight: bold;
-  }
-
   /* ボタンのスタイル設定 */
-  #send {
+  #back-btn {
     padding: 12px 20px;
     background-color: #00a8ff;
     color: white;
@@ -27,12 +24,12 @@ body {
   }
   
   /* ボタンのホバー時のスタイル */
-  #send:hover {
+  #back-btn:hover {
     background-color: #0097e6;
   }
   
   /* ボタンのクリック時のスタイル */
-  #send:active {
+  #back-btn:active {
     transform: scale(0.95);
   }
   
