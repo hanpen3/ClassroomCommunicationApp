@@ -37,36 +37,26 @@ document.querySelectorAll('.reaction').forEach((element) => {
 })
 
 ws.onopen = () => {
-    const message = username + " さんが参加しました";
+    const message = "server: " + username + " さんが参加しました";
     const obj_log = {
-        type: 'log', 
+        type: 'login', 
         content: message
-    }
-    const obj_connection = {
-        type: 'connection', 
-        content: null
     }
     const obj_eventNameRequest = {
         type: 'eventNameRequest', 
         content: null
     }
     ws.send(JSON.stringify(obj_log));
-    ws.send(JSON.stringify(obj_connection));
     ws.send(JSON.stringify(obj_eventNameRequest));
 };
 
 window.onbeforeunload = () => {
-    const message = username + " さんが退出しました";
+    const message = "server: " + username + " さんが退出しました";
     const obj_log = {
-        type: 'log',
+        type: 'logout',
         content: message
     }
-    const obj_disconnection = {
-        type: 'disconnection',
-        content: null
-    }
     ws.send(JSON.stringify(obj_log));
-    ws.send(JSON.stringify(obj_disconnection));
 };
 
 ws.onmessage = (event) => {
@@ -75,7 +65,12 @@ ws.onmessage = (event) => {
     const name = obj.name;
     const content = obj.content; //データの内容
 
-    if(type==="log"){
+    if(type==="login"){
+        const message = document.createElement('div');
+        message.textContent = content; // メッセージを文字列として処理
+        chat.appendChild(message);
+        chat.scrollTop = chat.scrollHeight;
+    }else if(type==="logout"){
         const message = document.createElement('div');
         message.textContent = content; // メッセージを文字列として処理
         chat.appendChild(message);
@@ -172,7 +167,7 @@ commentButton.onclick = () => {
             content: info
         }
         ws.send(JSON.stringify(obj)); // JSON形式で送信
-    messageInput.value = '';
+        messageInput.value = '';
     }
 };
 

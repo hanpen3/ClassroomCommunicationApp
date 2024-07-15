@@ -2,27 +2,25 @@ document.addEventListener('DOMContentLoaded', function() {
 const worksheetBtn = document.getElementById('worksheet-btn');
 const voteBtn = document.getElementById('vote-btn');
 const endEventBtn = document.getElementById('end-event-btn');
-const worksheet_ans_Btn = document.getElementById('worksheet-ans-btn'); // ワークシートの回答ダウンロード処理のテスト用ボタン
+const worksheet_ans_Btn = document.getElementById('worksheet-ans-btn'); // ワークシートの回答ダウンロード処理用ボタン
 const chatMessages = document.getElementById('chat-messages');
 const questions = document.getElementById('questions');
 const mainSpace = document.getElementById('mainSpace');
 const event = document.getElementById('eventName');
-
 
 const hostname = window.location.hostname;
 const ws = new WebSocket(`ws://${hostname}:3000`);
     
 const worksheet_ans = []; // 回答保存用配列
 
-var num_of_connection = 0;
-
 var eventName = prompt("イベント名を入力");
 event.textContent = eventName;
 
     let chatCount = 0;  //コメントの数
     let questionCount = 0;  //質問の数
+    let connectionCount = 0; // 同時接続数
 
-    /*自分が主催者であることをサーバに送信 */
+/*自分が主催者であることをサーバに送信 */
 ws.onopen = () => {
     const obj = {
         type: 'host',
@@ -99,13 +97,22 @@ function adjustChatHeight() {
         const name = obj.name;
         const content = obj.content; //データの内容
     
-        if(type==="log"){
+        if(type==="login"){
             const message = document.createElement('div');
             message.textContent = content; // メッセージを文字列として処理
             chatMessages.appendChild(message);
             chatMessages.scrollTop = chatMessages.scrollHeight;
+        }else if(type==="logout"){
+            const message = document.createElement('div');
+            message.textContent = content; // メッセージを文字列として処理
+            chatMessages.appendChild(message);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }else if(type==="connection"){
+            /* 同時接続数の更新 */
+            const connectionCount = document.getElementById('connection-count');
+            connectionCount.textContent = `接続: ${content}人`;
         }else if(type==="comment"){
-            /*コメントの処理*/
+            /* コメントの処理 */
             const message = document.createElement('div');
             if(content.anonymous){ //匿名の場合
                 message.textContent = content.message;
@@ -124,16 +131,6 @@ function adjustChatHeight() {
             }
             questions.appendChild(message);
             questions.scrollTop = questions.scrollHeight;
-        }else if(type==="connection"){
-            /*同時接続数の更新( + )*/
-            num_of_connection++;
-            const connectionCount = document.getElementById('connection-count');
-            connectionCount.textContent = `接続: ${num_of_connection}人`; // 文字列として処理 : 主催者も含まれるので、-1 する
-        }else if(type==="disconnection"){
-            /*同時接続数の更新( - )*/
-            num_of_connection--;
-            const connectionCount = document.getElementById('connection-count');
-            connectionCount.textContent = `${num_of_connection}人`; // 文字列として処理 : 主催者も含まれるので、-1 する
         }else if(type==="reaction"){
             /*リアクションを表示する */
             const image = document.createElement('img');
@@ -345,9 +342,34 @@ function adjustChatHeight() {
                 }
             });
         }else if(type==="worksheetSend"){
+            /* ワークシートの内容を配列にプッシュ */
             worksheet_ans.push("【" + name + "】: " + content + "\n\n");
-            //const image = document.createElement('img');
-            //image.src="./images/clear_good.png";
+
+            /* ワークシート受信を通知 */
+            const message = document.createElement('div');
+            message.textContent = "server: ワークシートを受信しました"; // メッセージを表示
+            chatMessages.appendChild(message);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+
+            /* アニメーションの設定 */
+            const image = document.createElement('img');
+            image.src="./images/clear_submit.png";
+            image.width=30;
+            image.height=30;
+            image.classList.add('reaction-animation');
+
+            const chatContainer = document.getElementById('versatile-space');  // チャットコンテナ要素を取得
+            /* ランダムな水平位置を設定 */
+            const maxLeft = chatContainer.clientWidth - image.width;  // 最大の左位置
+            const randomLeft = Math.floor(Math.random() * maxLeft);  // ランダムな左位置を計算
+            image.style.left = `${randomLeft}px`;  // 画像の左位置を設定
+
+            chatContainer.appendChild(image);  // 画像要素をチャットコンテナに追加
+
+            /* アニメーション終了後に要素を削除 */
+            setTimeout(() => {
+                image.remove();
+            }, 5000);
         }else if(type=="updateCounts"){
             chatCount = obj.chatCount;
             questionCount = obj.questionCount;

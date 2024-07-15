@@ -9,6 +9,7 @@ const server = http.createServer(app);
 const wss = new WebSocket.Server({ server });
 let chatCount = 0;  // チャットの数
 let questionCount = 0;  // 質問の数
+let connectionCount = 0; // 同時接続数
 
 
 app.use(express.static('public')); // 提供ディレクトリを'public'に設定
@@ -42,15 +43,24 @@ wss.on('connection', (ws) => {
         if (type === "comment") {
             chatCount++;
             broadcastCounts();
-          } else if (type === "question") {
+        } else if (type === "question") {
             questionCount++;
             broadcastCounts();
-          }
+        }
 
         switch(type) {
         case 'host': /*ホストの登録*/
             host=ws;
             console.log("ホストが登録されました");
+            /* 最初からオーディエンスがいた場合も同時接続を取得する */
+            const obj_init_connection = {
+                type: 'connection',
+                name: '',
+                content: connectionCount
+            }
+            if (host.readyState === WebSocket.OPEN) {
+                host.send(JSON.stringify(obj_init_connection)); // JSON形式で送信
+            }
             break;
         
         case 'vote': //主催者から投票の開催を受信
@@ -157,6 +167,44 @@ wss.on('connection', (ws) => {
         case 'passDemand':
             setOnetimePass();
             break;
+        case 'login':
+            connectionCount++;
+            console.log("login : " + connectionCount);
+            /* ログイン通知を全体に送信 */
+            wss.clients.forEach((client) => {
+                if (client.readyState === WebSocket.OPEN) {
+                    client.send(JSON.stringify(data)); // JSON形式で送信
+                }
+            });
+            /* 同時接続数を主催者へ送信 */
+            const obj_connection = {
+                type: 'connection',
+                name: '',
+                content: connectionCount
+            }
+            if (host.readyState === WebSocket.OPEN) {
+                host.send(JSON.stringify(obj_connection)); // JSON形式で送信
+            }
+            break;
+        case 'logout':
+            connectionCount--;
+            console.log("logout : " + connectionCount);
+            /* ログアウト通知を全体に送信 */
+            wss.clients.forEach((client) => {
+                if (client.readyState === WebSocket.OPEN) {
+                    client.send(JSON.stringify(data)); // JSON形式で送信
+                }
+            });
+            /* 同時接続数を主催者へ送信 */
+            const obj_disconnection = {
+                type: 'connection',
+                name: '',
+                content: connectionCount
+            }
+            if (host.readyState === WebSocket.OPEN) {
+                host.send(JSON.stringify(obj_disconnection)); // JSON形式で送信
+            }
+            break;
         default: //コメント・質問など全クライアントとホストに送るもの
             wss.clients.forEach((client) => {
                 if (client.readyState === WebSocket.OPEN) {
@@ -183,10 +231,6 @@ wss.on('connection', (ws) => {
     /* クライアント切断時の動作 */
     ws.on('close', () => {
         console.log('Client disconnected');
-        // num_of_connection--;
-
-        // updateConnectionCount(); //同時接続数の更新
-        
         clients = clients.filter(client => client !== ws);
     });
 });
