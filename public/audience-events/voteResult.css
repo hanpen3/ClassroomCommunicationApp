@@ -6,9 +6,31 @@
 .chart-container {
     position: relative;
     margin: auto;
-    height: 50vh;
-    width: 50vw;
+    height: 60vh;
+    width: 60vw;
 }
 #voteTitle{
     font-size: medium;
 }
+
+/* ボタンのスタイル設定 */
+#close {
+    padding: 12px 20px;
+    background-color: #00a8ff;
+    color: white;
+    border: none;
+    border-radius: 25px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.1s;
+  }
+  
+  /* ボタンのホバー時のスタイル */
+  #close:hover {
+    background-color: #0097e6;
+  }
+  
+  /* ボタンのクリック時のスタイル */
+  #close:active {
+    transform: scale(0.95);
+  }

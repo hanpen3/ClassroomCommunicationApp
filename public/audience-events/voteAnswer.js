@@ -66,11 +66,16 @@ window.addEventListener('message', (event) => {
         /*投票終了までのカウントダウンを表示*/
         const countDownLabel1 = document.createElement('span');
         countDownLabel1.textContent = `投票終了まで残り `;
+        countDownLabel1.style.fontSize='14px';
         timer.appendChild(countDownLabel1);
         const count = document.createElement('span');
+        count.style.fontSize='18px';
+        count.style.fontWeight='bold';
+        count.style.color='red';
         timer.appendChild(count);
         const countDownLabel2 = document.createElement('span');
         countDownLabel2.textContent = ` 秒`;
+        countDownLabel2.style.fontSize='14px';
         timer.appendChild(countDownLabel2);
 
         let countdownInterval;

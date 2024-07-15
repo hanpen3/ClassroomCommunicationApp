@@ -1,0 +1,38 @@
+/* ボディ全体のスタイル設定 */
+body {
+    font-family: 'Noto Sans JP', sans-serif;
+    background-color: #ffffff;
+    color: #333;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+  
+  #voteTitle{
+    font-size: 20px;
+    font-weight: bold;
+  }
+
+  /* ボタンのスタイル設定 */
+  #send {
+    padding: 12px 20px;
+    background-color: #00a8ff;
+    color: white;
+    border: none;
+    border-radius: 25px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.1s;
+  }
+  
+  /* ボタンのホバー時のスタイル */
+  #send:hover {
+    background-color: #0097e6;
+  }
+  
+  /* ボタンのクリック時のスタイル */
+  #send:active {
+    transform: scale(0.95);
+  }
+  
