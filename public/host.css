@@ -112,8 +112,8 @@ button:hover {
 
 #chat-messages, #questions {
     height: calc(100% - 50px); /* タイトルの高さを考慮して高さを調整 */
-    overflow-y: auto; /* スクロール可能にする */
-}
+    /* overflow-y: auto; /*スクロール可能にする */
+} 
 
 /* ステータスボックスのスタイル */
 .status-box {
