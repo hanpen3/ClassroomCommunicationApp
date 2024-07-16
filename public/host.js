@@ -368,6 +368,10 @@ function adjustChatHeight() {
             chatCount = obj.chatCount;
             questionCount = obj.questionCount;
             updateCountDisplay();
+        } else if(type==="log"){
+            message.textContent = content;
+            chatMessages.appendChild(message);
+            chatMessages.scrollTop = chatMessages.scrollHeight; // スクロール
         }
     };
 
