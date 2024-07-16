@@ -36,88 +36,52 @@ document.querySelectorAll('.reaction').forEach((element) => {
     element.addEventListener('click', reactionClickListener);
 })
 
-ws.onopen = () => {
-    const message = "server: " + username + " さんが参加しました";
-    const obj_log = {
-        type: 'login', 
-        content: message
-    }
-    const obj_eventNameRequest = {
-        type: 'eventNameRequest', 
-        content: null
-    }
-    ws.send(JSON.stringify(obj_log));
-    ws.send(JSON.stringify(obj_eventNameRequest));
-};
-
-window.onbeforeunload = () => {
-    const message = "server: " + username + " さんが退出しました";
-    const obj_log = {
-        type: 'logout',
-        content: message
-    }
-    ws.send(JSON.stringify(obj_log));
-};
-
 ws.onmessage = (event) => {
-    const obj=JSON.parse(event.data); //JSON形式からオブジェクトに
-    const type = obj.type; //データのタイプ
+    const obj = JSON.parse(event.data); // JSON形式からオブジェクトに
+    const type = obj.type; // データのタイプ
     const name = obj.name;
-    const content = obj.content; //データの内容
+    const content = obj.content; // データの内容
 
-    if(type==="login"){
-        const message = document.createElement('div');
+    const message = document.createElement('div');
+    if (type === "login" || type === "logout") {
         message.textContent = content; // メッセージを文字列として処理
-        chat.appendChild(message);
-        chat.scrollTop = chat.scrollHeight;
-    }else if(type==="logout"){
-        const message = document.createElement('div');
-        message.textContent = content; // メッセージを文字列として処理
-        chat.appendChild(message);
-        chat.scrollTop = chat.scrollHeight;
-    }else if(type==="comment"){
-        const message = document.createElement('div');
-        if(content.anonymous){ //匿名の場合
+        chat.insertBefore(message, chat.firstChild); // メッセージをリストの最初に挿入
+        chat.scrollTop = 0; // スクロール位置を最上部に設定
+    } else if (type === "comment" || type === "question") {
+        if (content.anonymous) { // 匿名の場合
             message.textContent = content.message;
-        }else{
-            message.textContent = name+": "+content.message;
+        } else {
+            message.textContent = name + ": " + content.message;
         }
-        chat.appendChild(message);
-        chat.scrollTop = chat.scrollHeight;
-    }else if(type==="question"){
-        const message = document.createElement('div');
-        if(content.anonymous){ //匿名の場合
-            message.textContent = content.message;
-        }else{
-            message.textContent = name+": "+content.message;
+        if (type === "question") {
+            message.style.color = 'red';
         }
-        message.style.color = 'red';
-        chat.appendChild(message);
-        chat.scrollTop = chat.scrollHeight;
-    }else if(type==="worksheet"){
-        const popup = window.open("./audience-events/worksheet.html", "_blank", "top=0,left=0,width=" + "500" + ",height=500");
+        chat.insertBefore(message, chat.firstChild); // メッセージをリストの最初に挿入
+        chat.scrollTop = 0; // スクロール位置を最上部に設定
+    } else if (type === "worksheet") {
+        const popup = window.open("./audience-events/worksheet.html", "_blank", "top=0,left=0,width=500,height=500");
         popup.onload = () => popup.postMessage(content, window.location.origin);
-    }else if(type==="vote"){
-        const popup = window.open("./audience-events/voteAnswer.html", "_blank", "top=0,left=0,width=" + "500" + ",height=500");
+    } else if (type === "vote") {
+        const popup = window.open("./audience-events/voteAnswer.html", "_blank", "top=0,left=0,width=500,height=500");
         popup.onload = () => popup.postMessage(content, window.location.origin);
-    }else if(type==="voteResult"){
-        const popup = window.open("./audience-events/voteResult.html", "_blank", "top=0,left=0,width=" + "500" + ",height=500");
+    } else if (type === "voteResult") {
+        const popup = window.open("./audience-events/voteResult.html", "_blank", "top=0,left=0,width=500,height=500");
         popup.onload = () => popup.postMessage(content, window.location.origin);
-    }else if(type==="reaction"){
+    } else if (type === "reaction") {
         const image = document.createElement('img');
-        if(content==="good"){
-            image.src="./images/clear_good.png";
-        }else if(content==="bad"){
-            image.src="./images/clear_bad.png";
-        }else if(content==="hatena"){
-            image.src="./images/clear_hatena.png";
-        }else if(content==="bikkuri"){
-            image.src="./images/clear_bikkuri.png";
-        }else if(content==="heart"){
-            image.src="./images/clear_heart.png";
+        if (content === "good") {
+            image.src = "./images/clear_good.png";
+        } else if (content === "bad") {
+            image.src = "./images/clear_bad.png";
+        } else if (content === "hatena") {
+            image.src = "./images/clear_hatena.png";
+        } else if (content === "bikkuri") {
+            image.src = "./images/clear_bikkuri.png";
+        } else if (content === "heart") {
+            image.src = "./images/clear_heart.png";
         }
-        image.width=30;
-        image.height=30;
+        image.width = 30;
+        image.height = 30;
         image.classList.add('reaction-animation');
         chat.scrollTop = chat.scrollHeight;
 
@@ -129,14 +93,15 @@ ws.onmessage = (event) => {
 
         chatContainer.appendChild(image);  // 画像要素をチャットコンテナに追加
 
-       // アニメーション終了後に要素を削除
+        // アニメーション終了後に要素を削除
         setTimeout(() => {
-                image.remove();
+            image.remove();
         }, 3000);
-    }else if(type==="eventNameSet"){
+    } else if (type === "eventNameSet") {
         eventName.textContent = content;
     }
 };
+
 
 /* ワークシートの内容を受け取った時の処理 */
 window.addEventListener('message', (event) => {

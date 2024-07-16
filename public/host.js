@@ -96,7 +96,15 @@ function adjustChatHeight() {
         const type = obj.type; //データのタイプ
         const name = obj.name;
         const content = obj.content; //データの内容
-    
+
+        // 新しいメッセージ要素を作成
+        const message = document.createElement('div');
+        if (content.anonymous) { // 匿名の場合
+            message.textContent = content.message;
+        } else {
+            message.textContent = name + ": " + content.message;
+        }
+        
         if(type==="login"){
             const message = document.createElement('div');
             message.textContent = content; // メッセージを文字列として処理
@@ -112,25 +120,11 @@ function adjustChatHeight() {
             const connectionCount = document.getElementById('connection-count');
             connectionCount.textContent = `接続: ${content}人`;
         }else if(type==="comment"){
-            /* コメントの処理 */
-            const message = document.createElement('div');
-            if(content.anonymous){ //匿名の場合
-                message.textContent = content.message;
-            }else{
-                message.textContent = name+": "+content.message;
-            }
             chatMessages.appendChild(message);
-            chatMessages.scrollTop = chatMessages.scrollHeight;
+            chatMessages.scrollTop = chatMessages.scrollHeight; // スクロール
         }else if(type==="question"){
-            /*質問の処理*/
-            const message = document.createElement('div');
-            if(content.anonymous){ //匿名の場合
-                message.textContent = content.message;
-            }else{
-                message.textContent = name+": "+content.message;
-            }
             questions.appendChild(message);
-            questions.scrollTop = questions.scrollHeight;
+            questions.scrollTop = questions.scrollHeight; // スクロール
         }else if(type==="reaction"){
             /*リアクションを表示する */
             const image = document.createElement('img');

@@ -12,11 +12,30 @@ let questionCount = 0;  // 質問の数
 let connectionCount = 0; // 同時接続数
 
 
+ 
+var os = require('os');
+var ifaces = os.networkInterfaces();
+var ipAddress;
+ 
+Object.keys(ifaces).forEach(function (ifname) {
+  ifaces[ifname].forEach(function (iface) {
+ 
+    if ('IPv4' !== iface.family || iface.internal !== false) {
+      // skip over internal (i.e. 127.0.0.1) and non-ipv4 addresses
+      return;
+    }
+
+    ipAddress = iface.address;
+ 
+  });
+});
+
+
 app.use(express.static('public')); // 提供ディレクトリを'public'に設定
 
 let clients = [];
 var oneTimePass;
-let host;
+let host = 0;
 let eventName;
 
 function setOnetimePass() {
@@ -201,8 +220,10 @@ wss.on('connection', (ws) => {
                 name: '',
                 content: connectionCount
             }
-            if (host.readyState === WebSocket.OPEN) {
-                host.send(JSON.stringify(obj_disconnection)); // JSON形式で送信
+            if (host != 0) {
+                if (host.readyState === WebSocket.OPEN) {
+                    host.send(JSON.stringify(obj_disconnection)); // JSON形式で送信
+                }   
             }
             break;
         default: //コメント・質問など全クライアントとホストに送るもの
@@ -246,5 +267,5 @@ app.get('/disconnectAll', (req, res) => {
 
 /* HTTPサーバーをポート3000で起動 */
 server.listen(3000, () => {
-    console.log('Server is running on http://localhost:3000');
+    console.log(`Server is running on http://${ipAddress}:3000`);
 });

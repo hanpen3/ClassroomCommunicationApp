@@ -5,7 +5,7 @@ body {
   background-color: #f0f4f8;
   color: #333;
 }
-  
+
 #eventName {
   font-size: 2em; /* 文字サイズを大きくする (2emは通常の2倍のサイズ) */
   font-weight: bold; /* 太字にする */
@@ -87,33 +87,29 @@ button {
 button:hover {
   background-color: #2980b9;
 }
-  
-  /* チャット表示と質問表示エリアのスクロール設定 */
-  #chat-display, #question-display {
-    height: 300px;
-    overflow-y: auto;
-  }
 
-  #chat-display, #question-display {
-    background-color: white;
-    border: 1px solid #ccc;
-    padding: 20px;
-    border-radius: 5px;
-    height: 400px; /* 高さを固定 */
+/* チャット表示と質問表示エリアのスクロール設定 */
+#chat-display, #question-display {
+  height: 400px;
+  overflow-y: auto;
+  position: relative; /* 相対位置に設定 */
 }
 
 #chat-title, #question-title {
-    position: sticky; /* タイトルを固定 */
-    top: 0; /* 上部に固定 */
-    background-color: white; /* 背景色を白に設定 */
-    padding: 10px; /* タイトルに余白を追加 */
-    z-index: 1; /* 他の要素の上に表示 */
+  position: sticky; /* 絶対位置に設定 */
+  top: -20px; /* 上にずらして表示 */
+  left: 0;
+  right: 0;
+  background-color: white; /* 背景色を白に設定 */
+  padding: 10px; /* タイトルに余白を追加 */
+  z-index: 1; /* 他の要素の上に表示 */
+  /* box-shadow: 0 2px 4px rgba(0,0,0,0.1); タイトルの下に影を追加 */
 }
 
 #chat-messages, #questions {
-    height: calc(100% - 50px); /* タイトルの高さを考慮して高さを調整 */
-    /* overflow-y: auto; /*スクロール可能にする */
-} 
+  padding-top: 50px; /* タイトルとコンテンツの間に余白を追加 */
+  height: calc(100% - 50px); /* タイトルの高さを考慮して高さを調整 */
+}
 
 /* ステータスボックスのスタイル */
 .status-box {
@@ -168,8 +164,8 @@ button:hover {
   gap: 10px;
 }
 
- /* リアクション画像のアニメーション用スタイル */
- .reaction-animation {
+/* リアクション画像のアニメーション用スタイル */
+.reaction-animation {
   position: absolute;  /* 絶対位置指定で自由に配置 */
   bottom: -50px;  /* 初期位置を画面下50px外に設定 */
   width: 50px;  /* 画像の幅を50pxに設定 */
