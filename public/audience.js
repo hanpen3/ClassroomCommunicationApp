@@ -44,6 +44,15 @@ ws.onopen = () => {
     ws.send(JSON.stringify(obj_log));
 }
 
+window.onbeforeunload = () => {
+    const message = "server: " + username + " さんが退出しました";
+    const obj_log = {
+        type: 'logout',
+        content: message
+    }
+    ws.send(JSON.stringify(obj_log));
+};
+
 /*イベントリスナーを紐づける */
 document.querySelectorAll('.reaction').forEach((element) => {
     element.addEventListener('click', reactionClickListener);
@@ -167,12 +176,12 @@ questionButton.onclick = () => {
 
 exitButton.onclick = () => {
     if(confirm("本当に退出しますか？")){
-        const message = "server: " + username + " さんが退出しました";
-        const obj_log = {
-            type: 'logout', 
-            content: message
-        }
-        window.location.href='./audience-events/exit.html';
+        // const message = "server: " + username + " さんが退出しました";
+        // const obj_log = {
+        //     type: 'logout', 
+        //     content: message
+        // }
+        window.close();
     }
 };
 
