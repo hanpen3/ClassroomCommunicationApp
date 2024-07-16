@@ -164,7 +164,7 @@ questionButton.onclick = () => {
         message: messageInput.value,  
         anonymous: anonymous.checked
     }
-    if (message) {
+    if (info.message) {
         const obj = {
             type: 'question',
             name: username, 
