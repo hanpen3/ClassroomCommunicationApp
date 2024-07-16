@@ -31,6 +31,19 @@ function reactionClickListener(e){
     ws.send(JSON.stringify(obj)); // JSON形式で送信
 }
 
+ws.onopen = () => {
+    const message = "server: " + username + " さんが参加しました";
+    const obj_log = {
+        type: 'login', 
+        content: message
+    }
+    const obj_eventNameRequest = {
+        type: 'eventNameRequest', 
+        content: null
+    }
+    ws.send(JSON.stringify(obj_log));
+}
+
 /*イベントリスナーを紐づける */
 document.querySelectorAll('.reaction').forEach((element) => {
     element.addEventListener('click', reactionClickListener);
