@@ -42,6 +42,7 @@ ws.onopen = () => {
         content: null
     }
     ws.send(JSON.stringify(obj_log));
+    ws.send(JSON.stringify(obj_eventNameRequest));
 }
 
 window.onbeforeunload = () => {
@@ -120,7 +121,7 @@ ws.onmessage = (event) => {
             image.remove();
         }, 3000);
     } else if (type === "eventNameSet") {
-        eventName.textContent = content;
+        eventName.textContent = obj.content;
     }
 };
 
