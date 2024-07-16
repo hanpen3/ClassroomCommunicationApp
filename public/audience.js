@@ -125,6 +125,10 @@ ws.onmessage = (event) => {
         }, 3000);
     } else if (type === "eventNameSet") {
         eventName.textContent = obj.content;
+    }else if (type === "log") {
+        message.textContent = content;
+        chat.insertBefore(message, chat.firstChild); // メッセージをリストの最初に挿入
+        chat.scrollTop = 0; // スクロール位置を最上部に設定
     }
 };
 
@@ -142,7 +146,7 @@ window.addEventListener('message', (event) => {
 ws.onclose = (event) => {
     const message = document.createElement('div');
     message.textContent = "サーバーによって接続が切断されました"; // メッセージを表示
-    chat.appendChild(message);
+    chat.insertBefore(message);
     chat.scrollTop = chat.scrollHeight;
 };
 

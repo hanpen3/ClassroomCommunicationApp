@@ -66,7 +66,7 @@ wss.on('connection', (ws) => {
             questionCount++;
             broadcastCounts();
         }
-
+        
         switch(type) {
         case 'host': /*ホストの登録*/
             host=ws;
