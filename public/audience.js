@@ -19,7 +19,10 @@ const anonymous = document.getElementById('anonymous');
 const hostname = window.location.hostname;
 const ws = new WebSocket(`ws://${hostname}:3000`);
 
-var username = prompt("ユーザー名");
+var username;
+while(!(username = prompt("ユーザー名"))){
+    ;
+}
 
 /*リアクションクリック時に実行する関数*/
 function reactionClickListener(e){
