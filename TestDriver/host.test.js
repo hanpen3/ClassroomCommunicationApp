@@ -113,4 +113,16 @@ describe('host.js tests', () => {
     // 送信されたメッセージの内容を確認
     // expect(JSON.parse(spy.mock.calls[0][0])).toEqual(expectedMessage);
   });
+
+  it('リアクション要素にイベントリスナーが設定されているか', () => {
+    const reactionElements = document.querySelectorAll('.reaction');
+
+    // 各リアクション要素にclickイベントリスナーが設定されているか確認
+    reactionElements.forEach(element => {
+      expect(element.onclick).toBeDefined();
+      expect(element.onclick).toBeInstanceOf(Function);
+    });
+
+    console.log('リアクション要素にイベントリスナー設定: 成功');
+  });
 });
