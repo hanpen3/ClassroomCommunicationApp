@@ -53,3 +53,4 @@ messageInput.addEventListener('keypress', (event) => {
         sendButton.click();
     }
 });
+
