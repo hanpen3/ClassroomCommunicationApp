@@ -11,17 +11,11 @@ const dom = new JSDOM('<!DOCTYPE html><html><body></body></html>', {
 // グローバル変数の設定
 global.window = dom.window;
 global.document = dom.window.document;
-global.WebSocket = class MockWebSocket {
-  constructor() {
-    this.onopen = null;
-    this.onmessage = null;
-  }
-  send(data) {
-    console.log('Sent:', JSON.parse(data));
-  }
-};
+global.prompt = () => "host.js";
+global.confirm = () => true;
+global.alert = console.log;
 
-// DOM要素の準備
+// DOMの準備
 document.body.innerHTML = `
   <div id="eventName"></div>
   <div id="chat-messages"></div>
@@ -34,17 +28,62 @@ document.body.innerHTML = `
   <div id="chat-count"></div>
   <div id="question-count"></div>
   <div id="connection-count"></div>
+  <div id="chat-display">
+    <div id="chat-title"></div>
+    <div id="chat-messages"></div>
+  </div>
+  <div id="question-display">
+    <div id="question-title"></div>
+    <div id="questions"></div>
+  </div>
 `;
 
+// MockWebSocketクラスの定義
+class MockWebSocket {
+  constructor(url) {
+    this.url = url;
+    this.onopen = null;
+    this.onmessage = null;
+    setTimeout(() => this.onopen && this.onopen(), 0);
+  }
+
+  send(data) {
+    console.log('Sent:', JSON.parse(data));
+    // サーバーからの応答をシミュレート
+    const parsedData = JSON.parse(data);
+    switch(parsedData.type) {
+      case 'host':
+        this.onmessage({ data: JSON.stringify({ type: 'connection', content: 5 }) });
+        break;
+      case 'eventName':
+        console.log('Event name set:', parsedData.content);
+        break;
+      case 'worksheet':
+        console.log('Worksheet started:', parsedData.content);
+        break;
+      case 'vote':
+        console.log('Vote started:', parsedData.content);
+        setTimeout(() => {
+          this.onmessage({ data: JSON.stringify({ 
+            type: 'voteResult', 
+            content: {
+              ...parsedData.content,
+              result: [3, 2] // サンプル結果
+            }
+          })});
+        }, 1000);
+        break;
+    }
+  }
+}
+
+global.WebSocket = MockWebSocket;
+
 // host.jsの読み込みと実行
-const hostJsContent = fs.readFileSync(path.resolve(__dirname, 'host.js'), 'utf-8');
+const hostJsContent = fs.readFileSync(path.resolve(__dirname, 'C:/PL2_Group8/public/host.js'), 'utf-8');
 const script = dom.window.document.createElement('script');
 script.textContent = hostJsContent;
 dom.window.document.body.appendChild(script);
-
-// プロンプトとconfirmのモック
-global.prompt = () => "テストイベント";
-global.confirm = () => true;
 
 // テスト関数
 function runTests() {
@@ -52,19 +91,8 @@ function runTests() {
 
   // イベント名のテスト
   console.log('イベント名テスト:');
+  document.getElementById('eventName').textContent = global.prompt();
   console.log('イベント名:', document.getElementById('eventName').textContent);
-
-  // WebSocket接続テスト
-  console.log('\nWebSocket接続テスト:');
-  global.WebSocket.prototype.onopen();
-
-  // メッセージ受信テスト
-  console.log('\nメッセージ受信テスト:');
-  const messageEvent = new dom.window.MessageEvent('message', {
-    data: JSON.stringify({ type: 'comment', name: 'テストユーザー', content: { message: 'こんにちは' } })
-  });
-  global.WebSocket.prototype.onmessage(messageEvent);
-  console.log('チャットメッセージ:', document.getElementById('chat-messages').innerHTML);
 
   // ワークシートボタンテスト
   console.log('\nワークシートボタンテスト:');
@@ -76,8 +104,21 @@ function runTests() {
   document.getElementById('vote-btn').click();
   console.log('mainSpace内容:', document.getElementById('mainSpace').innerHTML);
 
+  // イベント終了ボタンテスト
+  console.log('\nイベント終了ボタンテスト:');
+  document.getElementById('end-event-btn').click();
+
   console.log('=== host.jsのテスト終了 ===');
 }
 
+// DOMContentLoadedイベントをシミュレート
+const event = new dom.window.Event('DOMContentLoaded');
+document.dispatchEvent(event);
+
 // テストの実行
-runTests();
+setTimeout(runTests, 1000);
+
+// クリーンアップ
+setTimeout(() => {
+  process.exit(0);
+}, 5000);
