@@ -9,6 +9,4 @@
 - 複数クライアントが同時に接続できる。（20人程度が同時に接続しても問題なく動作することを確かめた。）
 
 ## 画面イメージ
-<img src="image2.png" width="30%">
-<img src="image4.png" width="30%">
-<img src="image5.png" width="30%">
+<img src="image1.png" width="30%"><img src="image2.png" width="30%"><img src="image4.png" width="30%"><img src="image5.png" width="30%">
